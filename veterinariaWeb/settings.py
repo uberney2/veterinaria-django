@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp'
+    'myapp',
     'veterinariaApp'
 ]
 
@@ -83,12 +83,12 @@ DATABASES = {
     
     'mongo': {
         'ENGINE': 'djongo',
-        'NAME': 'mi_basededatos',
+        'NAME': 'Veterinaria',
         'CLIENT': {
             'host': 'localhost',
             'port': 27017,
-            'username': 'mi_usuario',
-            'password': 'mi_contraseña',
+            # 'username': 'mi_usuario',
+            # 'password': 'mi_contraseña',
             'authSource': 'admin',
         }
     }
