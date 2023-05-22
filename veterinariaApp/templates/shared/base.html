@@ -2,7 +2,9 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
+   <!-- basic -->
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <!-- mobile metas -->
@@ -14,74 +16,107 @@
    <meta name="description" content="">
    <meta name="author" content="">
    <!-- bootstrap css -->
-   <link rel="stylesheet" href="css/bootstrap.min.css">
+   <link rel="stylesheet" href="{% static 'style/bootstrap.min.css' %}">
    <!-- style css -->
-   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="{% static 'style/style.css' %}">
    <!-- Responsive-->
-   <link rel="stylesheet" href="css/responsive.css">
+   <link rel="stylesheet" href="{% static 'style/responsive.css' %}">
    <!-- fevicon -->
-   <link rel="icon" href="images/fevicon.png" type="image/gif" />
+   <link rel="icon" href="{% static 'images/fevicon.png' %}" type="image/gif" />
    <!-- Scrollbar Custom CSS -->
-   <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+   <link rel="stylesheet" href="{% static 'style/jquery.mCustomScrollbar.min.css' %}">
    <!-- Tweaks for older IEs-->
-   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+   <link rel="stylesheet" href="{% static 'https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' %}">
    <!-- owl stylesheets -->
-   <link rel="stylesheet" href="css/owl.carousel.min.css">
-   <link rel="stylesheet" href="css/owl.theme.default.min.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+   <link rel="stylesheet" href="{% static 'style/owl.carousel.min.css' %}">
+   <link rel="stylesheet" href="{% static 'style/owl.theme.default.min.css' %}">
+   <link rel="stylesheet" href="{% static 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css' %}" media="screen">
+</head>
+<body>
+  <!-- header section start -->
+  <div class="header_section">
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="logo"><a href="index.html"><img src="{% static 'images/logo.png' %}"></a></div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+           <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                 <a class="nav-link" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="health.html">Mascota</a>
+              </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="medicine.html">Medicina</a>
+              </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="news.html">Noticias</a>
+              </li>
+              <li class="nav-item">
+                 <a class="nav-link" href="client.html">Clientes</a>
+              </li>
+              <!-- <li class="nav-item">
+                 <a class="nav-link" href="contact.html">Contact Us</a>
+              </li> -->
+              <li class="nav-item">
+                 <a class="nav-link" href="#"><img src="{% static 'images/search-icon.png' %}"></a>
+              </li>
+           </ul>
+        </div>
+     </nav>
+
+    <main class="container">
+      {% block content %}
+      {% endblock %}
+    </main>
 
 
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Django Projects</title>
-    <link rel="stylesheet" href="{% static 'styles/main.css' %}" />
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="logo">
-        <a href="index.html"><img src="images/logo.png" /></a>
+    <div class="footer_section layout_padding">
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-3 col-sm-6">
+               <div class="footer_logo"><a href="index.html"><img src="{% static 'images/footer-logo.png' %}"></a></div>
+               <h1 class="adderss_text">Contactanos</h1>
+               <div class="map_icon"><img src="{% static 'images/map-icon.png' %}" ><span class="paddlin_left_0">Calle 101 # 90 - 10</span></div>
+               <div class="map_icon"><img src="{% static 'images/call-icon.png' %}"><span class="paddlin_left_0">+57  300 789 71 81</span></div>
+               <div class="map_icon"><img src="{% static 'images/mail-icon.png' %}"><span class="paddlin_left_0">veterinaria@nurgo.com.co</span></div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+               <h1 class="adderss_text">Doctores</h1>
+               <div class="hiphop_text_1">Contamos con los mejores veterinarios para los cuidados de tu mascota</div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+               <h1 class="adderss_text">Ubicados</h1>
+               <div class="Useful_text">Estamos ubicados en las principales ciudades de Colombia.</div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+               <h1 class="adderss_text">Información</h1>
+               <input type="text" class="Enter_text" placeholder="Ingrese su Email" name="Enter your Emil">
+               <div class="subscribe_bt"><a href="#">Suscribete</a></div>
+               <div class="social_icon">
+                  <ul>
+                     <li><a href="#"><img src="{% static 'images/fb-icon.png' %}"></a></li>
+                     <li><a href="#"><img src="{% static 'images/twitter-icon.png' %}"></a></li>
+                     <li><a href="#"><img src="{% static 'images/linkedin-icon.png' %}"></a></li>
+                     <li><a href="#"><img src="{% static 'images/instagram-icon.png' %}"></a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
       </div>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="health.html">Mascota</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="medicine.html">Medicina</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="news.html">Noticias</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="client.html">Clientes</a>
-          </li>
-          <!-- <li class="nav-item">
-               <a class="nav-link" href="contact.html">Contact Us</a>
-            </li> -->
-          <li class="nav-item">
-            <a class="nav-link" href="#"
-              ><img src="images/search-icon.png"
-            /></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main class="container">{% block content %} {% endblock %}</main>
-  </body>
+   </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+    <script src="{% static 'js/plugin.js' %}"></script>
+    <!-- sidebar {% static '-->
+    <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %} "></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- javascri{% static 'pt -->
+    <script src="{% static 'js/owl.carousel.js' %}"></script>
+    <script src="{% static 'https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js' %}"></script>
+ </body>
 </html>
