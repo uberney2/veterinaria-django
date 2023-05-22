@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',
+    # 'myapp',
     'veterinariaApp'
 ]
 
@@ -77,13 +77,8 @@ WSGI_APPLICATION = 'veterinariaWeb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    
-    'mongo': {
         'ENGINE': 'djongo',
-        'NAME': 'Veterinaria',
+        'NAME': 'VeterinariaMongo',
         'CLIENT': {
             'host': 'localhost',
             'port': 27017,
@@ -91,7 +86,16 @@ DATABASES = {
             # 'password': 'mi_contraseña',
             'authSource': 'admin',
         }
-    }
+    },
+    
+    'mysql': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'veterinariamysql',
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }   
 }
 
 
