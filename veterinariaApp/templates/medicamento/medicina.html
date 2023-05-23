@@ -1,0 +1,61 @@
+{% extends 'shared/base.html' %}
+
+
+{% block content %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de venta de medicamentos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Formulario de venta de medicamentos</h1>
+        <form>
+            <div class="form-group">
+                <label for="Cedula">Cedula del cliente:</label required>
+                <input type="text" class="form-control" id="Cedula" placeholder="Ingrese su cedula" required>
+            </div>
+            <div class="form-group">
+                <label for="medicamento">Seleccione el medicamento:</label>
+            </div>
+            <div class="form-group">
+                <label for="medicamento"></label>
+                <select id="medicamento" name="medicamento" required>
+                    <option value="">Seleccionar</option>
+                    <option value="Medicamento1">Desparacitante para perro</option>
+                    <option value="Medicamento2">Desparacitante para gato</option>
+                    <option value="Medicamento3">Prevención de pulgas</option>
+                    <option value="Medicamento3">Analgésico</option>
+                    <option value="Medicamento3">Aspirina</option>
+                    <option value="Medicamento3">Acetaminofen</option>
+                    <option value="Medicamento3">Suero</option>
+                    <option value="Medicamento3">Amoxicilina</option>
+                    <option value="Medicamento3">Gotas para ojos</option>
+                </select><br>
+            </div>
+            <br>
+            <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" id="cantidad"
+                    placeholder="Ingrese la cantidad de medicamentos">
+                    <br>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+<br>
+
+{% endblock %}
