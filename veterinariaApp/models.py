@@ -31,19 +31,7 @@ class Roles(models.Model):
         app_label = 'veterinariaApp'
         db_table = 'Rol'
 
-class Factura(models.Model):
-    id = models.CharField(max_length=200, primary_key=True)
-    idMascota = models.CharField(max_length=200)
-    cedulaDueño = models.CharField(max_length=200)
-    idOrden = models.CharField(max_length=200)
-    productos = models.TextField
-    total = models.TextField
-    fecha = models.DateField
-    
-    class Meta:
-        app_label = 'veterinariaApp'
-        db_table = 'Factura'
-        
+
 class Usuario(models.Model):
     id = models.CharField(max_length=200, primary_key=True)
     nombreUsuario =  models.CharField(max_length=200)
@@ -52,7 +40,6 @@ class Usuario(models.Model):
     nombre = models.CharField(max_length=200)
     edad = models.CharField(max_length=3)
     rol= models.ForeignKey(Roles, on_delete=models.PROTECT)
-    Factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Usuario'
@@ -86,4 +73,17 @@ class OrdenMascotas(models.Model):
     
     
     
+class Factura(models.Model):
+    id = models.CharField(max_length=200, primary_key=True)
+    idMascota = models.CharField(max_length=200)
+    cedulaDueño = models.CharField(max_length=200)
+    idOrden = models.CharField(max_length=200)
+    productos = models.TextField
+    total = models.TextField
+    fecha = models.DateField
+    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     
+    class Meta:
+        app_label = 'veterinariaApp'
+        db_table = 'Factura'
+        
