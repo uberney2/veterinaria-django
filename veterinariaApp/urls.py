@@ -9,5 +9,6 @@ urlpatterns=[
     path('administrator/', views.administrator ),
     path('singup/logout/',views.logout),
     path('hc/', views.crearHistoriaClinica, name = 'hc' ),
-    path('dueño-mascota/', views.crearDueñoMascota, name = 'dueño' )
+    path('dueño-mascota/', views.crearDueñoMascota, name = 'dueño' ),
+    path('mascota/', views.crearMascota, name = 'mascota' )
 ]

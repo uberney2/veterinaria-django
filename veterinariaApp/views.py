@@ -1,13 +1,13 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from veterinariaApp.forms import CrearFormHistoriaClinica, AgregarDueñoMascotaForm
+from veterinariaApp.forms import CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm
 from veterinariaApp.models import HistoriaClinica
 from .conexionMongoDB import collection
 
@@ -126,3 +126,20 @@ def crearDueñoMascota(request):
         edad = request.POST['edad']
         AgregarDueñoMascota(cedula, nombre, edad )
         return redirect('dueño')
+    
+def crearMascota(request):
+    if request.method == 'GET':
+        print("entre")
+        return render(request, 'historia-clinica/agregar-mascota.html',{
+            'form': AgregarMascotaForm()
+        })
+    else:
+        nombre = request.POST['nombre']
+        cedula_dueño = request.POST['cedula_dueño']
+        edad = request.POST['edad']
+        especie = request.POST['especie']
+        raza = request.POST['raza']
+        caracteristicas = request.POST['caracteristicas']
+        peso = request.POST['peso']
+        AgregarMascota(nombre, cedula_dueño, edad, especie, raza, caracteristicas, peso)
+        return redirect('mascota')
