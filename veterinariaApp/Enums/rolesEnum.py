@@ -1,7 +1,7 @@
 from enum import Enum
 
 class Roles (Enum):
-    Administrador = "Administrador"
-    veterinario = "Veterinario"
-    dueñoMascota= "Dueño Mascota"
-    vendedor = "Vendedor"
+    Administrador = 1
+    veterinario = 2
+    dueñoMascota= 4
+    vendedor = 3

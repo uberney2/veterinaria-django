@@ -1,12 +1,13 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from veterinariaApp.forms import CrearFormHistoriaClinica
+from veterinariaApp.forms import CrearFormHistoriaClinica, AgregarDueñoMascotaForm
 from veterinariaApp.models import HistoriaClinica
 from .conexionMongoDB import collection
 
@@ -112,3 +113,16 @@ def crearHistoriaClinica(request):
         
         # HistoriaClinica.objects.using('default').create(hcJson)
         return redirect('hc')
+    
+def crearDueñoMascota(request):
+    if request.method == 'GET':
+        print("entre")
+        return render(request, 'historia-clinica/registro_dueño_mascota.html',{
+            'form': AgregarDueñoMascotaForm()
+        })
+    else:
+        cedula = request.POST['cedula']
+        nombre = request.POST['nombre']
+        edad = request.POST['edad']
+        AgregarDueñoMascota(cedula, nombre, edad )
+        return redirect('dueño')

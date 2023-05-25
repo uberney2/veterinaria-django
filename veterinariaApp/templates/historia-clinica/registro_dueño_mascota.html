@@ -1,11 +1,25 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
-<h1>Crear Historia Clinica</h1>
+<h1>Registrar el dueño de la mascota</h1>
 
-<form method="POST" action="{% url 'hc' %}">
+<form method="POST" action="{% url 'dueño' %}">
     {% csrf_token %}
-    {{form}}
+    {{ form.cedula.label_tag }}
+    {{ form.cedula }}
+    <br>
+    
+    {{ form.nombre.label_tag }}
+    {{ form.nombre }}
+    <br>
+    
+    {{ form.edad.label_tag }}
+    {{ form.edad }}
+    <br>
+    
+    {{ form.rol.label_tag }}
+    {{ form.rol }}
+    <br>
     <button>
         Save
     </button>

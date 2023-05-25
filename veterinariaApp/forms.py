@@ -18,8 +18,7 @@ class CrearFormHistoriaClinica(forms.Form):
     detalleProcedimiento = forms.CharField(label="Detalles del Procedimiento", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     estadoOrden = forms.CharField(label="Estado de la Orden", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     
-class AgregarDUeñoMascotaFOrm(forms.Form):
+class AgregarDueñoMascotaForm(forms.Form):
     cedula = forms.CharField(label="Cedula", max_length=20, widget=forms.TextInput(attrs={'class': 'input'}))
     nombre = forms.CharField(label="Nombre Completo", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     edad = forms.CharField(label="Edad", max_length=3, widget=forms.TextInput(attrs={'class': 'input'}))
-    forms.ChoiceField(label="Rol", choices=[(role.name, role.value) for role in Roles])

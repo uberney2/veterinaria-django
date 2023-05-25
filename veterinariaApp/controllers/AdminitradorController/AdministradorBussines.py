@@ -1,4 +1,4 @@
-from veterinariaApp.models import Usuario,Roles
+from veterinariaApp.models import Usuario,Rol
 import uuid
 from django.core.exceptions import ObjectDoesNotExist
 def buscar(usuario):
@@ -14,7 +14,7 @@ def addEmpleado(nombre, cedula, edad, rol, usuario, contraseña):
         return None
     else:
         id = uuid.uuid4()
-        rol_objeto = Roles.objects.get(id=rol)
+        rol_objeto = Rol.objects.get(id=rol)
         nuevo_usuario = Usuario.objects.create(
             id=id,
             nombreUsuario=usuario,
