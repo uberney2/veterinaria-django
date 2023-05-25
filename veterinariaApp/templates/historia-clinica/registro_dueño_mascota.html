@@ -1,0 +1,14 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<h1>Crear Historia Clinica</h1>
+
+<form method="POST" action="{% url 'hc' %}">
+    {% csrf_token %}
+    {{form}}
+    <button>
+        Save
+    </button>
+</form>
+
+{% endblock %}

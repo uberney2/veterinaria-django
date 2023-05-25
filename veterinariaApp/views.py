@@ -1,8 +1,14 @@
+import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from veterinariaApp.forms import CrearFormHistoriaClinica
+from veterinariaApp.models import HistoriaClinica
+from .conexionMongoDB import collection
 
 
 
@@ -62,3 +68,47 @@ def administrator(request):
 def logout(request):
    request.session['username'] =None
    return render(request,'shared/index.html',{"error":"session cerrada"})
+
+def crearHistoriaClinica(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/historia_clinica.html',{
+            'form': CrearFormHistoriaClinica()
+        })
+    else:
+        hcJson = {}
+        hcJson['_id'] = request.POST.get('_id', '')  # Acceder al campo _id usando request.POST.get()
+        hcJson[request.POST.get('_id', '')] = {}  # Acceder al campo _id usando request.POST.get()
+        hcJson[request.POST.get('_id', '')][request.POST['fechaConsulta']] = {
+            "medicoVeterinario": request.POST['medicoVeterinario'],
+            "motivoConsulta": request.POST['motivoConsulta'],
+            "sintomatologia": request.POST['sintomatologia'],
+            "diagnostico": request.POST['diagnostico'],
+            "procedimiento": request.POST['procedimiento'],
+            "medicamento": request.POST['medicamento'],
+            "dosis": request.POST['dosis'],
+            "idOrden": request.POST['idOrden'],
+            "historialVacunacion": request.POST['historialVacunacion'],
+            "alergiasMedicamentos": request.POST['alergiasMedicamentos'],
+            "detalleProcedimiento": request.POST['detalleProcedimiento'],
+            "estadoOrden": request.POST['estadoOrden']
+        }
+        print(hcJson)
+        # hcJson.pop('_id', None)
+        collection.insert_one(hcJson)
+        # HistoriaClinica.objects.using('default').create(idMascota = hcJson['idMascota'], 
+        #                                                 fechaConsulta=hcJson['fechaConsulta'],
+        #                                                 medicoVeterinario=hcJson['medicoVeterinario'],
+        #                                                 motivoConsulta=hcJson['motivoConsulta'],
+        #                                                 sintomatologia=hcJson['sintomatologia'],
+        #                                                 diagnostico=hcJson['diagnostico'],
+        #                                                 procedimiento=hcJson['procedimiento'],
+        #                                                 medicamento=hcJson['medicamento'],
+        #                                                 dosis=hcJson['dosis'],
+        #                                                 idOrden=hcJson['idOrden'],
+        #                                                 historialVacunacion=hcJson['historialVacunacion'],
+        #                                                 alergiasMedicamentos=hcJson['alergiasMedicamentos'],
+        #                                                 detalleProcedimiento=hcJson['detalleProcedimiento'],
+        #                                                 estadoOrden=hcJson['estadoOrden'])
+        
+        # HistoriaClinica.objects.using('default').create(hcJson)
+        return redirect('hc')
