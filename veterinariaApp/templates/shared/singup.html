@@ -1,0 +1,57 @@
+{% extends 'shared/base.html' %}
+
+
+{% block content %}
+{% load static %}
+<style>
+.send_bt {
+    text-align: center;
+}
+
+.send_bt a,
+.send_bt button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    text-decoration: none; /* Quitar subrayado del enlace si se usa <a> */
+    border: none; /* Quitar borde del botón */
+    border-radius: 4px; /* Dar bordes redondeados al botón */
+    cursor: pointer;
+    margin-top: 20px;
+    width: 200px;
+}
+
+.send_bt a:hover,
+.send_bt button:hover {
+    background-color: #45a049; /* Color de fondo del botón al pasar el cursor */
+}
+
+
+</style>
+
+<div class="container">
+    <div class="row">
+<div class="col-md-6">
+    <div class="contact_box">
+       <h1 class="book_text">Iniciar Sesion</h1>
+       <form action="{{url}}" method="POST">
+         {% csrf_token %}
+         <input type="text" class="Email_text" placeholder="Usuario" name="user"id="user" required>
+         <input type="password" class="Email_text" placeholder="Contraseña" name="pass" id="pass" required>
+         <div class="send_bt">
+         <button type="submit">Iniciar</button>
+         </div>
+         {{error}}
+         {{url}}
+     </form>
+     
+    </div>
+ </div>
+ <div class="col-md-6">
+    <div class="image_1"><img src="{% static 'images/img-1.png' %}"></div>
+ </div>
+</div>
+</div>
+
+{% endblock %}
