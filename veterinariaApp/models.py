@@ -22,7 +22,7 @@ class HistoriaClinica(models.Model):
         db_table = 'Historia_clinica'
 
 
-class Roles(models.Model):
+class Rol(models.Model):
     id = models.CharField(max_length=200, primary_key=True)
     descripcion = models.CharField(max_length=200)
     
@@ -38,7 +38,7 @@ class Usuario(models.Model):
     cedula =  models.CharField(max_length=200)
     nombre = models.CharField(max_length=200)
     edad = models.CharField(max_length=3)
-    rol= models.ForeignKey(Roles, on_delete=models.PROTECT)
+    rol= models.ForeignKey(Rol, on_delete=models.PROTECT)
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Usuario'
@@ -69,8 +69,6 @@ class OrdenMascotas(models.Model):
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Orden'
-    
-    
     
 class Factura(models.Model):
     id = models.CharField(max_length=200, primary_key=True)
