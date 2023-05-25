@@ -3,7 +3,10 @@ from . import views
 
 
 urlpatterns={
-path('', views.index)
-
+path('', views.iniciar, name="inicio"),
+path('register/', views.register ),
+path('singup/',views.singup),
+path('administrator/', views.administrator ),
+path('singup/logout/',views.logout),
 
 }
