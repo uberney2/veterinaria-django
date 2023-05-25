@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
@@ -76,42 +76,21 @@ def crearHistoriaClinica(request):
             'form': CrearFormHistoriaClinica()
         })
     else:
-        hcJson = {}
-        hcJson['_id'] = request.POST.get('_id', '')  # Acceder al campo _id usando request.POST.get()
-        hcJson[request.POST.get('_id', '')] = {}  # Acceder al campo _id usando request.POST.get()
-        hcJson[request.POST.get('_id', '')][request.POST['fechaConsulta']] = {
-            "medicoVeterinario": request.POST['medicoVeterinario'],
-            "motivoConsulta": request.POST['motivoConsulta'],
-            "sintomatologia": request.POST['sintomatologia'],
-            "diagnostico": request.POST['diagnostico'],
-            "procedimiento": request.POST['procedimiento'],
-            "medicamento": request.POST['medicamento'],
-            "dosis": request.POST['dosis'],
-            "idOrden": request.POST['idOrden'],
-            "historialVacunacion": request.POST['historialVacunacion'],
-            "alergiasMedicamentos": request.POST['alergiasMedicamentos'],
-            "detalleProcedimiento": request.POST['detalleProcedimiento'],
-            "estadoOrden": request.POST['estadoOrden']
-        }
-        print(hcJson)
-        # hcJson.pop('_id', None)
-        collection.insert_one(hcJson)
-        # HistoriaClinica.objects.using('default').create(idMascota = hcJson['idMascota'], 
-        #                                                 fechaConsulta=hcJson['fechaConsulta'],
-        #                                                 medicoVeterinario=hcJson['medicoVeterinario'],
-        #                                                 motivoConsulta=hcJson['motivoConsulta'],
-        #                                                 sintomatologia=hcJson['sintomatologia'],
-        #                                                 diagnostico=hcJson['diagnostico'],
-        #                                                 procedimiento=hcJson['procedimiento'],
-        #                                                 medicamento=hcJson['medicamento'],
-        #                                                 dosis=hcJson['dosis'],
-        #                                                 idOrden=hcJson['idOrden'],
-        #                                                 historialVacunacion=hcJson['historialVacunacion'],
-        #                                                 alergiasMedicamentos=hcJson['alergiasMedicamentos'],
-        #                                                 detalleProcedimiento=hcJson['detalleProcedimiento'],
-        #                                                 estadoOrden=hcJson['estadoOrden'])
+        medicoVeterinario = request.POST['medicoVeterinario']
+        motivoConsulta= request.POST['motivoConsulta']
+        sintomatologia= request.POST['sintomatologia']
+        diagnostico= request.POST['diagnostico']
+        procedimiento= request.POST['procedimiento']
+        medicamento= request.POST['medicamento']
+        dosis= request.POST['dosis']
+        idOrden= request.POST['idOrden']
+        historialVacunacion= request.POST['historialVacunacion']
+        alergiasMedicamentos= request.POST['alergiasMedicamentos']
+        detalleProcedimiento =request.POST['detalleProcedimiento']
+        estadoOrden =request.POST['estadoOrden']
         
-        # HistoriaClinica.objects.using('default').create(hcJson)
+        CreacionHistoriaClinica(medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
+        
         return redirect('hc')
     
 def crearDueñoMascota(request):

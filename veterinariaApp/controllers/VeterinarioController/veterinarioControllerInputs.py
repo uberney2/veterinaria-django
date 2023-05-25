@@ -1,4 +1,4 @@
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import AfiliarDueñoMascota, afiliarMascota
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota
 
 
 def AgregarDueñoMascota(cedulaDueño, nombreDueño, edad):
@@ -74,3 +74,30 @@ def AgregarMascota(nombre, cedulaDueño, edad, especie, raza, caracteristicas, p
     mascota = afiliarMascota(nombre, cedula, edad, especie, raza, caracteristicas, peso)
     
     return
+
+def CreacionHistoriaClinica(profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
+    if motivoConsulta == None or motivoConsulta == " ":
+        print("Motivo onsulta no pueden ser un espacio vacio")
+        return
+    
+    if sintomatologia == None or sintomatologia == " ":
+        print("sintomatologia no pueden ser un espacio vacio")
+        return
+    
+    if diagnostico == None or diagnostico == " ":
+        print("diagnostico no pueden ser un espacio vacio")
+        return
+    
+    if procedimiento == None or procedimiento == " ":
+        print("procedimiento no pueden ser un espacio vacio")
+        return
+    
+    if alergiaMedicamentos == None or alergiaMedicamentos == " ":
+        print("Alergia medicamentos no pueden ser un espacio vacio")
+        return
+    
+    if detalleProcedimiento == None or detalleProcedimiento == " ":
+        print("Detalle procedimiento no pueden ser un espacio vacio")
+        return
+    
+    HistoriaClinicaCreacion(profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento )

@@ -3,8 +3,6 @@ from django import forms
 from veterinariaApp.Enums.rolesEnum import Roles
 
 class CrearFormHistoriaClinica(forms.Form):
-    _id = forms.CharField(label="Identificacion de la mascosta", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
-    fechaConsulta = forms.CharField(label="Fecha", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     medicoVeterinario = forms.CharField(label="Nombre del medico", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     motivoConsulta = forms.CharField(label="Motivo consulta", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     medicamento = forms.CharField(label="Medicamento", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))

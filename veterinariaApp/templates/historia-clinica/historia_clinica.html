@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Crear Historia Clinica</h1>
 
-<form method="POST" action="{% url 'dueño' %}">
+<form method="POST" action="{% url 'hc' %}">
     {% csrf_token %}
     {{form.as_p}}
     <button>
