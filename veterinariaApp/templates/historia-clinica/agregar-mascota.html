@@ -1,0 +1,40 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<h1>Registrar mascota</h1>
+
+<form method="POST" action="{% url 'mascota' %}">
+    {% csrf_token %}
+    {{ form.nombre.label_tag }}
+    {{ form.nombre }}
+    <br>
+    
+    {{ form.cedula_dueño.label_tag }}
+    {{ form.cedula_dueño }}
+    <br>
+    
+    {{ form.edad.label_tag }}
+    {{ form.edad }}
+    <br>
+    
+    {{ form.especie.label_tag }}
+    {{ form.especie }}
+    <br>
+
+    {{ form.raza.label_tag }}
+    {{ form.raza }}
+    <br>
+
+    {{ form.caracteristicas.label_tag }}
+    {{ form.caracteristicas }}
+    <br>
+
+    {{ form.peso.label_tag }}
+    {{ form.peso }}
+    <br>
+    <button>
+        Save
+    </button>
+</form>
+
+{% endblock %}
