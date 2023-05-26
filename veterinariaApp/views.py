@@ -1,13 +1,13 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from veterinariaApp.forms import CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm
+from veterinariaApp.forms import BuscarUsuarioForm, CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm, comenzarCreaciónHistoriaClinicaForm
 from veterinariaApp.models import HistoriaClinica
 from .conexionMongoDB import collection
 
@@ -70,10 +70,12 @@ def logout(request):
    request.session['username'] =None
    return render(request,'shared/index.html',{"error":"session cerrada"})
 
-def crearHistoriaClinica(request):
+def crearHistoriaClinica(request, id):
+    print(id)
     if request.method == 'GET':
         return render(request, 'historia-clinica/historia_clinica.html',{
-            'form': CrearFormHistoriaClinica()
+            'form': CrearFormHistoriaClinica(),
+            'id' : id
         })
     else:
         medicoVeterinario = request.POST['medicoVeterinario']
@@ -89,9 +91,10 @@ def crearHistoriaClinica(request):
         detalleProcedimiento =request.POST['detalleProcedimiento']
         estadoOrden =request.POST['estadoOrden']
         
-        CreacionHistoriaClinica(medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
+        CreacionHistoriaClinica(id, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
         
-        return redirect('hc')
+        return redirect('veterinario')
+    
     
 def crearDueñoMascota(request):
     if request.method == 'GET':
@@ -122,3 +125,39 @@ def crearMascota(request):
         peso = request.POST['peso']
         AgregarMascota(nombre, cedula_dueño, edad, especie, raza, caracteristicas, peso)
         return redirect('mascota')
+
+def indexHistoriaClinica(request):
+    return render(request, 'historia-clinica/indexVeterinario.html')
+
+def desarrolloHistoriaClinica(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/comienzo_hc.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False
+        })
+    else:
+        cedula_dueño = request.POST['cedula_dueño']
+        dueño = BuscarDueño(cedula_dueño)
+        if dueño is  None:
+            return render(request, 'historia-clinica/comienzo_hc.html',{
+                'form': BuscarUsuarioForm(),
+                'hasDueño': False,
+                'disableBuscarUsuario' : True
+            })
+        else:
+            mascotas = buscarMascota(dueño.id)
+            if mascotas is None:
+                return render(request, 'historia-clinica/comienzo_hc.html',{
+                    'form': BuscarUsuarioForm(),
+                    'hasDueño': True, 
+                    'mascotas': None,
+                    'disableBuscarUsuario' : True
+                })
+            else:
+                return render(request, 'historia-clinica/comienzo_hc.html',{
+                    'form': BuscarUsuarioForm(),
+                    'formMascota' : comenzarCreaciónHistoriaClinicaForm(),
+                    'hasDueño': True, 
+                    'mascotas': mascotas,
+                    'disableBuscarUsuario' : True
+                })

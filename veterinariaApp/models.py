@@ -1,8 +1,10 @@
+import uuid
 from django.db import models
 
 # Create your models here.
 
 class HistoriaClinica(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fechaConsulta = models.CharField(max_length=200)
     medicoVeterinario = models.CharField(max_length=200)
     motivoConsulta = models.CharField(max_length=200)

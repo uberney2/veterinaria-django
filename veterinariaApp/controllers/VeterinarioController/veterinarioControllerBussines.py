@@ -1,6 +1,6 @@
 import uuid
 from veterinariaApp.Enums.rolesEnum import Roles
-from veterinariaApp.models import Mascota, Rol, Usuario
+from veterinariaApp.models import HistoriaClinica, Mascota, Rol, Usuario
 from django.core.exceptions import ObjectDoesNotExist
 from veterinariaApp.conexionMongoDB import collection
 from datetime import datetime
@@ -9,6 +9,13 @@ def buscar(cedula):
     try:
         usuario_existente = Usuario.objects.using('mysql').get(cedula=str(cedula))
         return usuario_existente
+    except ObjectDoesNotExist:
+        return None
+
+def buscarMascotas(cedulaDueño):
+    try:
+        mascotas = Mascota.objects.using('mysql').filter(Usuario=str(cedulaDueño))
+        return mascotas
     except ObjectDoesNotExist:
         return None
 
@@ -32,15 +39,17 @@ def afiliarMascota(nombre, cedula_dueño, edad, especie, raza, caracteristicas, 
     Mascota.objects.using('mysql').create(id=id, nombre=nombre, cedula_dueño=cedula_dueño, edad=edad, especie=especie, raza=raza, caracteristicas=caracteristicas, peso=peso, Usuario = personaEncontrada)
     return 
 
-def HistoriaClinicaCreacion(profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
-    usuario_existe = buscar('1152189806')
-    mascota = Mascota.objects.using('mysql').get(Usuario = usuario_existe.id)
-    # id = uuid.uuid4()
+def HistoriaClinicaCreacion(id,profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
+    try:
+        hasHistoriaClinica = collection.find_one(id)
+    except HistoriaClinica.DoesNotExist:
+        hasHistoriaClinica = None
+    
     fechaConsulta = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     hcJson = {}
-    hcJson['_id'] = mascota.id  
-    hcJson[mascota.id ] = {}  
-    hcJson[mascota.id ][fechaConsulta] = {
+    hcJson['_id'] = id  
+    hcJson[id ] = {}  
+    hcJson[id ][fechaConsulta] = {
         "medicoVeterinario": profesionalAtiende,
         "motivoConsulta": motivoConsulta,
         "sintomatologia": sintomatologia,

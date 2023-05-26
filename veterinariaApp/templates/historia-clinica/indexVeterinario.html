@@ -1,0 +1,13 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+<h1>Menú principal veterinario</h1>
+
+<div>
+    <a href="{% url 'dueño' %}"> Agregar Dueño de la mascota</a>
+    <a href="{% url 'mascota' %}"> Agregar Mascota</a>
+    <a href="{% url 'crear-historia' %}"> Crear historia clinica</a>
+</div>
+
+{% endblock %}

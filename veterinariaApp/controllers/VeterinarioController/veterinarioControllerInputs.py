@@ -1,4 +1,4 @@
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas
 
 
 def AgregarDueñoMascota(cedulaDueño, nombreDueño, edad):
@@ -75,7 +75,7 @@ def AgregarMascota(nombre, cedulaDueño, edad, especie, raza, caracteristicas, p
     
     return
 
-def CreacionHistoriaClinica(profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
+def CreacionHistoriaClinica(id, profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
     if motivoConsulta == None or motivoConsulta == " ":
         print("Motivo onsulta no pueden ser un espacio vacio")
         return
@@ -100,4 +100,20 @@ def CreacionHistoriaClinica(profesionalAtiende, motivoConsulta, sintomatologia, 
         print("Detalle procedimiento no pueden ser un espacio vacio")
         return
     
-    HistoriaClinicaCreacion(profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento )
+    HistoriaClinicaCreacion(id, profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento )
+    
+def BuscarDueño(cedula_dueño):
+    if cedula_dueño == None or cedula_dueño == " ":
+        print("la cedula no puede ser vacio")
+        return
+    try:
+        cedula = int(cedula_dueño)
+    except:
+        print("la cedula debe ser numerica")
+    return buscar(cedula_dueño)
+
+def buscarMascota(cedula_dueño):
+    if cedula_dueño == None or cedula_dueño == " ":
+        print("la cedula no puede ser vacio")
+        return
+    return buscarMascotas(cedula_dueño)

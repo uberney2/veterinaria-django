@@ -29,3 +29,9 @@ class AgregarMascotaForm(forms.Form):
     raza = forms.CharField(label="Raza", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     caracteristicas = forms.CharField(label="Caracteristicas", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     peso = forms.CharField(label="Peso", max_length=3, widget=forms.TextInput(attrs={'class': 'input'}))
+
+class BuscarUsuarioForm(forms.Form):
+    cedula_dueño = forms.CharField(label="Cedula del dueño de la mascota", max_length=20, widget=forms.TextInput(attrs={'class': 'input'}))
+    
+class comenzarCreaciónHistoriaClinicaForm(forms.Form):
+    idMascota = forms.CharField(label="Identificación de la mascota", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
