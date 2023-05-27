@@ -163,7 +163,5 @@ def cancelacionOrden(idOrden, fecha, idMascota):
             f"{idMascota}.{fecha}.estadoOrden": "Cancelada"
         }
     }
-    result = collection.update_one(filter, update)
-    
-
+    collection.update_one(filter, update)
     return True
