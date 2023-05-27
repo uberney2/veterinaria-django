@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
@@ -159,5 +159,74 @@ def desarrolloHistoriaClinica(request):
                     'formMascota' : comenzarCreaciónHistoriaClinicaForm(),
                     'hasDueño': True, 
                     'mascotas': mascotas,
+                    'disableBuscarUsuario' : True,
+                })
+
+def editarHistoriaClinica(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/comienzo_edicion.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False
+        })
+    else:
+        cedula_dueño = request.POST['cedula_dueño']
+        dueño = BuscarDueño(cedula_dueño)
+        if dueño is  None:
+            return render(request, 'historia-clinica/comienzo_edicion.html',{
+                'hasDueño': False,
+                'disableBuscarUsuario' : True
+            })
+        else:
+            mascotas = buscarMascota(dueño.id)
+            if mascotas is None:
+                return render(request, 'historia-clinica/comienzo_edicion.html',{
+                    'hasDueño': True, 
+                    'mascotas': None,
                     'disableBuscarUsuario' : True
                 })
+            else:
+                return render(request, 'historia-clinica/comienzo_edicion.html',{
+                    'hasDueño': True, 
+                    'mascotas': mascotas,
+                    'disableBuscarUsuario' : True
+                })
+
+def listarHistoriaClinica(request, id):
+    if request.method == 'GET':
+        historiasClinicas = BuscarHistoriasbyId(id)
+        print(historiasClinicas)
+        return render(request, 'historia-clinica/ver_historias_clinicas.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+                'historias' : historiasClinicas
+        })
+
+def edicionHistoriaClinica(request, id):
+    fecha = request.GET.get('fecha')
+    historiaClinica = consultarHistoriaClinicaByFecha(fecha, id)
+    if request.method == 'GET':
+        hc = historiaClinica.get(id, {}).get(fecha, None)
+        return render(request, 'historia-clinica/editar_historia_clinica.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+                'hc' : hc,
+                'id' : id,
+                'fecha': fecha
+        })
+    else:
+        fecha = request.POST['fecha']
+        medicoVeterinario = request.POST['medicoVeterinario']
+        motivoConsulta= request.POST['motivoConsulta']
+        sintomatologia= request.POST['sintomatologia']
+        diagnostico= request.POST['diagnostico']
+        procedimiento= request.POST['procedimiento']
+        medicamento= request.POST['medicamento']
+        dosis= request.POST['dosis']
+        idOrden= request.POST['idOrden']
+        historialVacunacion= request.POST['historialVacunacion']
+        alergiasMedicamentos= request.POST['alergiasMedicamentos']
+        detalleProcedimiento =request.POST['detalleProcedimiento']
+        estadoOrden =request.POST['estadoOrden']
+        updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
+        return redirect('veterinario')
+    

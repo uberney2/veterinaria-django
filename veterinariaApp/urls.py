@@ -12,6 +12,8 @@ urlpatterns=[
     path('dueño-mascota/', views.crearDueñoMascota, name = 'dueño' ),
     path('mascota/', views.crearMascota, name = 'mascota' ),
     path('index-vet/', views.indexHistoriaClinica, name = 'veterinario' ),
-    path('historia/', views.desarrolloHistoriaClinica, name = 'crear-historia' )
-
+    path('crear-historia/', views.desarrolloHistoriaClinica, name = 'crear-historia' ),
+    path('editar-historia/', views.editarHistoriaClinica, name = 'editar-historia' ),
+    path('listar-historia/<str:id>', views.listarHistoriaClinica, name = 'listar-historia' ),
+    path('editar-historia-clinica/<str:id>', views.edicionHistoriaClinica, name = 'editar-historia-clinica' )
 ]

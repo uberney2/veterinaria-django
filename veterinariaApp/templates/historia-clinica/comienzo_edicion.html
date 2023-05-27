@@ -1,10 +1,10 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
-<h1>HC</h1>
+<h1>Editar HC</h1>
 <br />
 {% if disableBuscarUsuario == False %}
-<form method="POST" action="{% url 'crear-historia' %}">
+<form method="POST" action="{% url 'editar-historia' %}">
     {% csrf_token %}
     {{ form.cedula_dueño.label_tag }} 
     {{ form.cedula_dueño }}
@@ -14,13 +14,12 @@
 {% endif %}
 
 {% if hasDueño == False %}
-<div>
-    <a href="{% url 'dueño' %}"> Agregar Dueño de la mascota</a>
-</div>
+<a href="{% url 'editar-historia' %}"> no se encontro dueño de mascota con la cedula ingresada</a>
 {% endif %}
 
 {% if hasDueño == True and mascotas is None %}
 <div>
+    <h1>el usuario no tiene mascotas registradas</h1>
     <a href="{% url 'mascota' %}"> Agregar Mascota</a>
 </div>
 {% endif %}
@@ -30,11 +29,11 @@
 {% for mascota in mascotas %}
 
 <div>
-    <a href="{% url 'hc' mascota.id %}">
+    <h1>Seleccione la mascota para ver sus historias clinicas</h1>
+    <a href="{% url 'listar-historia' mascota.id %}">
         <h1>{{mascota.nombre}}</h1>
     </a>
 </div>
-
 
 {% endfor %}
 

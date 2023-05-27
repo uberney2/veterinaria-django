@@ -1,4 +1,4 @@
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas, buscarHistoriasClinicasById, consultarHistoriaClinicaByFechaAndId, actualizarHistoriaClinica
 
 
 def AgregarDueñoMascota(cedulaDueño, nombreDueño, edad):
@@ -100,6 +100,9 @@ def CreacionHistoriaClinica(id, profesionalAtiende, motivoConsulta, sintomatolog
         print("Detalle procedimiento no pueden ser un espacio vacio")
         return
     
+    if medicamento == None or medicamento == "":
+        medicamento = "ninguno"
+    
     HistoriaClinicaCreacion(id, profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento )
     
 def BuscarDueño(cedula_dueño):
@@ -117,3 +120,35 @@ def buscarMascota(cedula_dueño):
         print("la cedula no puede ser vacio")
         return
     return buscarMascotas(cedula_dueño)
+
+def BuscarHistoriasbyId(id):
+    return buscarHistoriasClinicasById(id)
+
+def consultarHistoriaClinicaByFecha(fecha, id):
+    return consultarHistoriaClinicaByFechaAndId(fecha, id)
+
+def updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento ):
+    if motivoConsulta == None or motivoConsulta == " ":
+        print("Motivo onsulta no pueden ser un espacio vacio")
+        return
+    
+    if sintomatologia == None or sintomatologia == " ":
+        print("sintomatologia no pueden ser un espacio vacio")
+        return
+    
+    if diagnostico == None or diagnostico == " ":
+        print("diagnostico no pueden ser un espacio vacio")
+        return
+    
+    if procedimiento == None or procedimiento == " ":
+        print("procedimiento no pueden ser un espacio vacio")
+        return
+    
+    if alergiasMedicamentos == None or alergiasMedicamentos == " ":
+        print("Alergia medicamentos no pueden ser un espacio vacio")
+        return
+    
+    if detalleProcedimiento == None or detalleProcedimiento == " ":
+        print("Detalle procedimiento no pueden ser un espacio vacio")
+        return
+    return actualizarHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
