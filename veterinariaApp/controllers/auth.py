@@ -14,6 +14,7 @@ def autenticar(usuario, contraseña):
     usuario_existe = buscar(usuario)
     if usuario_existe is not None:
         contraseña_desencriptada = signing.loads(usuario_existe.Contraseña)  
+        print(contraseña_desencriptada)
         if contraseña_desencriptada == contraseña:
             return usuario_existe
         else:
