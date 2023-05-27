@@ -26,6 +26,3 @@ def addEmpleado(nombre, cedula, edad, rol, usuario, contraseña):
         )
         nuevo_usuario.save()
         return nuevo_usuario
-    
-
-   

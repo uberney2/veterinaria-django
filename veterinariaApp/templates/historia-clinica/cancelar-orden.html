@@ -1,0 +1,55 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<h1>Cancelar Orden</h1>
+<br />
+
+{% if disableBuscarUsuario == False %}
+<form method="POST" action="{% url 'cancelar-orden' %}">
+    {% csrf_token %}
+    {{ form.cedula_dueño.label_tag }} 
+    {{ form.cedula_dueño }}
+    <br />
+    <button>buscar</button>
+</form>
+{% endif %}
+
+{% if hasDueño == False %}
+<div>
+    <p> el usuario con la cedula ingresada no existe</p>
+</div>
+{% endif %}
+
+{% if hasDueño == True and ordenes is None %}
+<div>
+    <h2>el cliente no posee mascotas con ordenes creadas</h2>
+</div>
+{% endif %}
+
+{% if hasDueño == True and ordenes is not None %}
+
+{% for orden in ordenes %}
+
+<div>
+    <a href="{% url 'confirmacion-cancelar-orden' orden.id %}?fecha={{orden.fechaHistoria}}&idMascota={{orden.idMascota}}">
+
+        <h2> id de la orden</h2>
+        <p>{{orden.id}}</p>
+
+        <h2> id mascota</h2>
+        <p>{{orden.idMascota}}</p>
+
+        <h2> nombre medicamento</h2>
+        <p>{{orden.nombreMedicamento}}</p>
+
+        <h2> fecha orden (historia clinica)</h2>
+        <p>{{orden.fechaHistoria}}</p>
+    </a>
+</div>
+
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

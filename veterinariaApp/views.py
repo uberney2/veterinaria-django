@@ -1,13 +1,13 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from veterinariaApp.forms import CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm
+from veterinariaApp.forms import BuscarUsuarioForm, CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm, comenzarCreaciónHistoriaClinicaForm
 from veterinariaApp.models import HistoriaClinica
 from .conexionMongoDB import collection
 
@@ -70,49 +70,31 @@ def logout(request):
    request.session['username'] =None
    return render(request,'shared/index.html',{"error":"session cerrada"})
 
-def crearHistoriaClinica(request):
+def crearHistoriaClinica(request, id):
+    print(id)
     if request.method == 'GET':
         return render(request, 'historia-clinica/historia_clinica.html',{
-            'form': CrearFormHistoriaClinica()
+            'form': CrearFormHistoriaClinica(),
+            'id' : id
         })
     else:
-        hcJson = {}
-        hcJson['_id'] = request.POST.get('_id', '')  # Acceder al campo _id usando request.POST.get()
-        hcJson[request.POST.get('_id', '')] = {}  # Acceder al campo _id usando request.POST.get()
-        hcJson[request.POST.get('_id', '')][request.POST['fechaConsulta']] = {
-            "medicoVeterinario": request.POST['medicoVeterinario'],
-            "motivoConsulta": request.POST['motivoConsulta'],
-            "sintomatologia": request.POST['sintomatologia'],
-            "diagnostico": request.POST['diagnostico'],
-            "procedimiento": request.POST['procedimiento'],
-            "medicamento": request.POST['medicamento'],
-            "dosis": request.POST['dosis'],
-            "idOrden": request.POST['idOrden'],
-            "historialVacunacion": request.POST['historialVacunacion'],
-            "alergiasMedicamentos": request.POST['alergiasMedicamentos'],
-            "detalleProcedimiento": request.POST['detalleProcedimiento'],
-            "estadoOrden": request.POST['estadoOrden']
-        }
-        print(hcJson)
-        # hcJson.pop('_id', None)
-        collection.insert_one(hcJson)
-        # HistoriaClinica.objects.using('default').create(idMascota = hcJson['idMascota'], 
-        #                                                 fechaConsulta=hcJson['fechaConsulta'],
-        #                                                 medicoVeterinario=hcJson['medicoVeterinario'],
-        #                                                 motivoConsulta=hcJson['motivoConsulta'],
-        #                                                 sintomatologia=hcJson['sintomatologia'],
-        #                                                 diagnostico=hcJson['diagnostico'],
-        #                                                 procedimiento=hcJson['procedimiento'],
-        #                                                 medicamento=hcJson['medicamento'],
-        #                                                 dosis=hcJson['dosis'],
-        #                                                 idOrden=hcJson['idOrden'],
-        #                                                 historialVacunacion=hcJson['historialVacunacion'],
-        #                                                 alergiasMedicamentos=hcJson['alergiasMedicamentos'],
-        #                                                 detalleProcedimiento=hcJson['detalleProcedimiento'],
-        #                                                 estadoOrden=hcJson['estadoOrden'])
+        medicoVeterinario = request.POST['medicoVeterinario']
+        motivoConsulta= request.POST['motivoConsulta']
+        sintomatologia= request.POST['sintomatologia']
+        diagnostico= request.POST['diagnostico']
+        procedimiento= request.POST['procedimiento']
+        medicamento= request.POST['medicamento']
+        dosis= request.POST['dosis']
+        idOrden= request.POST['idOrden']
+        historialVacunacion= request.POST['historialVacunacion']
+        alergiasMedicamentos= request.POST['alergiasMedicamentos']
+        detalleProcedimiento =request.POST['detalleProcedimiento']
+        estadoOrden =request.POST['estadoOrden']
         
-        # HistoriaClinica.objects.using('default').create(hcJson)
-        return redirect('hc')
+        CreacionHistoriaClinica(id, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
+        
+        return redirect('veterinario')
+    
     
 def crearDueñoMascota(request):
     if request.method == 'GET':
@@ -143,3 +125,146 @@ def crearMascota(request):
         peso = request.POST['peso']
         AgregarMascota(nombre, cedula_dueño, edad, especie, raza, caracteristicas, peso)
         return redirect('mascota')
+
+def indexHistoriaClinica(request):
+    return render(request, 'historia-clinica/indexVeterinario.html')
+
+def desarrolloHistoriaClinica(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/comienzo_hc.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False
+        })
+    else:
+        cedula_dueño = request.POST['cedula_dueño']
+        dueño = BuscarDueño(cedula_dueño)
+        if dueño is  None:
+            return render(request, 'historia-clinica/comienzo_hc.html',{
+                'form': BuscarUsuarioForm(),
+                'hasDueño': False,
+                'disableBuscarUsuario' : True
+            })
+        else:
+            mascotas = buscarMascota(dueño.id)
+            if mascotas is None:
+                return render(request, 'historia-clinica/comienzo_hc.html',{
+                    'form': BuscarUsuarioForm(),
+                    'hasDueño': True, 
+                    'mascotas': None,
+                    'disableBuscarUsuario' : True
+                })
+            else:
+                return render(request, 'historia-clinica/comienzo_hc.html',{
+                    'form': BuscarUsuarioForm(),
+                    'formMascota' : comenzarCreaciónHistoriaClinicaForm(),
+                    'hasDueño': True, 
+                    'mascotas': mascotas,
+                    'disableBuscarUsuario' : True,
+                })
+
+def editarHistoriaClinica(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/comienzo_edicion.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False
+        })
+    else:
+        cedula_dueño = request.POST['cedula_dueño']
+        dueño = BuscarDueño(cedula_dueño)
+        if dueño is  None:
+            return render(request, 'historia-clinica/comienzo_edicion.html',{
+                'hasDueño': False,
+                'disableBuscarUsuario' : True
+            })
+        else:
+            mascotas = buscarMascota(dueño.id)
+            if mascotas is None:
+                return render(request, 'historia-clinica/comienzo_edicion.html',{
+                    'hasDueño': True, 
+                    'mascotas': None,
+                    'disableBuscarUsuario' : True
+                })
+            else:
+                return render(request, 'historia-clinica/comienzo_edicion.html',{
+                    'hasDueño': True, 
+                    'mascotas': mascotas,
+                    'disableBuscarUsuario' : True
+                })
+
+def listarHistoriaClinica(request, id):
+    if request.method == 'GET':
+        historiasClinicas = BuscarHistoriasbyId(id)
+        print(historiasClinicas)
+        return render(request, 'historia-clinica/ver_historias_clinicas.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+                'historias' : historiasClinicas
+        })
+
+def edicionHistoriaClinica(request, id):
+    fecha = request.GET.get('fecha')
+    historiaClinica = consultarHistoriaClinicaByFecha(fecha, id)
+    if request.method == 'GET':
+        hc = historiaClinica.get(id, {}).get(fecha, None)
+        return render(request, 'historia-clinica/editar_historia_clinica.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+                'hc' : hc,
+                'id' : id,
+                'fecha': fecha
+        })
+    else:
+        fecha = request.POST['fecha']
+        medicoVeterinario = request.POST['medicoVeterinario']
+        motivoConsulta= request.POST['motivoConsulta']
+        sintomatologia= request.POST['sintomatologia']
+        diagnostico= request.POST['diagnostico']
+        procedimiento= request.POST['procedimiento']
+        medicamento= request.POST['medicamento']
+        dosis= request.POST['dosis']
+        idOrden= request.POST['idOrden']
+        historialVacunacion= request.POST['historialVacunacion']
+        alergiasMedicamentos= request.POST['alergiasMedicamentos']
+        detalleProcedimiento =request.POST['detalleProcedimiento']
+        estadoOrden =request.POST['estadoOrden']
+        updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
+        return redirect('veterinario')
+
+def cancelarOrden(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/cancelar-orden.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+        })
+    else:
+         cedula_dueño = request.POST['cedula_dueño']
+         dueño = BuscarDueño(cedula_dueño)
+         if dueño is  None:
+            return render(request, 'historia-clinica/cancelar-orden.html',{
+                'hasDueño': False,
+                'disableBuscarUsuario' : True
+            })
+         else:
+            ordenes = buscarOrdenes(cedula_dueño)
+            if ordenes is None:
+                return render(request, 'historia-clinica/cancelar-orden.html',{
+                    'hasDueño': True, 
+                    'ordenes': None,
+                    'disableBuscarUsuario' : True
+                })
+            else:
+                return render(request, 'historia-clinica/cancelar-orden.html',{
+                    'hasDueño': True, 
+                    'ordenes': ordenes,
+                    'disableBuscarUsuario' : True
+                })
+
+def confirmacionCancelacionOrden(request, id):
+    if request.method == 'GET':
+        fecha = request.GET.get('fecha')
+        idMascota = request.GET.get('idMascota')
+        cencelacion = cancelarOrdenes(id, fecha, idMascota )
+        return render(request, 'historia-clinica/cancelar-orden.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+        })
