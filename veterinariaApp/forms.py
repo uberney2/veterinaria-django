@@ -35,3 +35,4 @@ class BuscarUsuarioForm(forms.Form):
     
 class comenzarCreaciónHistoriaClinicaForm(forms.Form):
     idMascota = forms.CharField(label="Identificación de la mascota", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
+

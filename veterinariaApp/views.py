@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render,redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes
 from veterinariaApp.controllers.auth import autenticar
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
@@ -229,4 +229,42 @@ def edicionHistoriaClinica(request, id):
         estadoOrden =request.POST['estadoOrden']
         updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
         return redirect('veterinario')
-    
+
+def cancelarOrden(request):
+    if request.method == 'GET':
+        return render(request, 'historia-clinica/cancelar-orden.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+        })
+    else:
+         cedula_dueño = request.POST['cedula_dueño']
+         dueño = BuscarDueño(cedula_dueño)
+         if dueño is  None:
+            return render(request, 'historia-clinica/cancelar-orden.html',{
+                'hasDueño': False,
+                'disableBuscarUsuario' : True
+            })
+         else:
+            ordenes = buscarOrdenes(cedula_dueño)
+            if ordenes is None:
+                return render(request, 'historia-clinica/cancelar-orden.html',{
+                    'hasDueño': True, 
+                    'ordenes': None,
+                    'disableBuscarUsuario' : True
+                })
+            else:
+                return render(request, 'historia-clinica/cancelar-orden.html',{
+                    'hasDueño': True, 
+                    'ordenes': ordenes,
+                    'disableBuscarUsuario' : True
+                })
+
+def confirmacionCancelacionOrden(request, id):
+    if request.method == 'GET':
+        fecha = request.GET.get('fecha')
+        idMascota = request.GET.get('idMascota')
+        cencelacion = cancelarOrdenes(id, fecha, idMascota )
+        return render(request, 'historia-clinica/cancelar-orden.html',{
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario' : False,
+        })

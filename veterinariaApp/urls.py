@@ -15,5 +15,7 @@ urlpatterns=[
     path('crear-historia/', views.desarrolloHistoriaClinica, name = 'crear-historia' ),
     path('editar-historia/', views.editarHistoriaClinica, name = 'editar-historia' ),
     path('listar-historia/<str:id>', views.listarHistoriaClinica, name = 'listar-historia' ),
-    path('editar-historia-clinica/<str:id>', views.edicionHistoriaClinica, name = 'editar-historia-clinica' )
+    path('editar-historia-clinica/<str:id>', views.edicionHistoriaClinica, name = 'editar-historia-clinica' ),
+    path('cancelar-orden/', views.cancelarOrden, name = 'cancelar-orden' ),
+    path('confirmacion-cancelar-orden/<str:id>', views.confirmacionCancelacionOrden, name = 'confirmacion-cancelar-orden' )
 ]

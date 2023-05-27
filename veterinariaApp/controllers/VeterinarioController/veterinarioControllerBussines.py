@@ -44,16 +44,17 @@ def buscarHistoriaClinica(id):
     
 
 def HistoriaClinicaCreacion(id,profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
-    idOrden = uuid.uuid4()
+    idOrden = f'{uuid.uuid4()}'
     orden = OrdenMascotas()
     if medicamento != "ninguno":
         mascota = Mascota.objects.using('mysql').get(id=str(id))
         usuario = Usuario.objects.using('mysql').get(id=str(mascota.Usuario.id))
-        orden.id = uuid.uuid4()
+        orden.id = idOrden
         orden.idMascota = id
         orden.cedulaDueno = usuario.cedula
         orden.cedulaVeterinario = "1037238472"
         orden.nombreMedicamento = medicamento
+        orden.estado = "Activa"
         estadoOrden = "Activa"
         aplicaOrden = True
     else:
@@ -87,7 +88,7 @@ def HistoriaClinicaCreacion(id,profesionalAtiende, motivoConsulta, sintomatologi
         
         if aplicaOrden == True:
             orden.fechaHistoria = fechaConsulta
-            OrdenMascotas.objects.using('mysql').create(id=orden.id, idMascota = orden.idMascota, cedulaDueno = orden.cedulaDueno, cedulaVeterinario = orden.cedulaVeterinario, nombreMedicamento = orden.nombreMedicamento, fechaHistoria = orden.fechaHistoria  )
+            OrdenMascotas.objects.using('mysql').create(id=orden.id, idMascota = orden.idMascota, cedulaDueno = orden.cedulaDueno, cedulaVeterinario = orden.cedulaVeterinario, nombreMedicamento = orden.nombreMedicamento, fechaHistoria = orden.fechaHistoria, estado = orden.estado )
             
     else:
         fechaConsulta = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -110,7 +111,7 @@ def HistoriaClinicaCreacion(id,profesionalAtiende, motivoConsulta, sintomatologi
         collection.update_one({'_id': id} , {'$set': hasHistoriaClinica})
         if aplicaOrden == True:
             orden.fechaHistoria = fechaConsulta
-            OrdenMascotas.objects.using('mysql').create(id=orden.id, idMascota = orden.idMascota, cedulaDueno = orden.cedulaDueno, cedulaVeterinario = orden.cedulaVeterinario, nombreMedicamento = orden.nombreMedicamento, fechaHistoria = orden.fechaHistoria  )
+            OrdenMascotas.objects.using('mysql').create(id=orden.id, idMascota = orden.idMascota, cedulaDueno = orden.cedulaDueno, cedulaVeterinario = orden.cedulaVeterinario, nombreMedicamento = orden.nombreMedicamento, fechaHistoria = orden.fechaHistoria, estado = orden.estado  )
 
 def buscarHistoriasClinicasById(id):
     return buscarHistoriaClinica(id)
@@ -143,3 +144,26 @@ def actualizarHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sint
         }
     hc[str(id)][fecha].update(nuevaInfo)
     collection.update_one({"_id": id}, {"$set": hc})
+
+def buscarOrdenesById(cedula):
+    ordenes = OrdenMascotas.objects.using('mysql').filter(cedulaDueno=str(cedula))  
+    return ordenes
+
+def cancelacionOrden(idOrden, fecha, idMascota):
+    orden = OrdenMascotas.objects.using('mysql').get(id = idOrden)
+    orden.estado = "Cancelado"
+    orden.save()
+    
+    filter = {
+        "_id": idMascota,
+        f"{idMascota}.{fecha}.idOrden": idOrden
+    }
+    update = {
+        "$set": {
+            f"{idMascota}.{fecha}.estadoOrden": "Cancelada"
+        }
+    }
+    result = collection.update_one(filter, update)
+    
+
+    return True

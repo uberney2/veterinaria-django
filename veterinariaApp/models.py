@@ -67,6 +67,7 @@ class OrdenMascotas(models.Model):
     cedulaVeterinario = models.CharField(max_length=200)
     nombreMedicamento = models.CharField(max_length=200)
     fechaHistoria = models.CharField(max_length=200)
+    estado = models.CharField(max_length=50)
     
     class Meta:
         app_label = 'veterinariaApp'

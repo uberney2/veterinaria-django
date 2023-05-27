@@ -1,4 +1,4 @@
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas, buscarHistoriasClinicasById, consultarHistoriaClinicaByFechaAndId, actualizarHistoriaClinica
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas, buscarHistoriasClinicasById, consultarHistoriaClinicaByFechaAndId, actualizarHistoriaClinica, buscarOrdenesById, cancelacionOrden
 
 
 def AgregarDueñoMascota(cedulaDueño, nombreDueño, edad):
@@ -152,3 +152,9 @@ def updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomat
         print("Detalle procedimiento no pueden ser un espacio vacio")
         return
     return actualizarHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento )
+
+def buscarOrdenes(cedula):
+    return buscarOrdenesById(cedula)
+
+def cancelarOrdenes(idOrden, fecha, idMascota):
+    return cancelacionOrden(idOrden, fecha, idMascota)
