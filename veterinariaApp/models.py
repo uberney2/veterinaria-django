@@ -83,4 +83,12 @@ class Factura(models.Model):
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Factura'
-        
+
+class Productos(models.Model):
+    id = models.CharField(max_length=200, primary_key=True)
+    producto =  models.TextField
+    valor = models.DecimalField  
+
+    class Meta:
+        app_label = 'veterinariaApp'
+        db_table = 'Productos' 

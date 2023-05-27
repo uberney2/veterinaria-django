@@ -160,3 +160,19 @@ def crearMascota(request):
         AgregarMascota(nombre, cedula_dueño, edad, especie,
                        raza, caracteristicas, peso)
         return redirect('mascota')
+    
+def vendedor(request):
+    return render(request, 'medicamento/vendedor.html')
+
+def ventaSinOrden(request):
+    if request.method=='GET':
+        return render (request, 'medicamento/ventaSinOrden.html')
+    else:
+        return
+
+def ventaConOrden(request):
+    if request.method=='GET':
+        return render (request, 'medicamento/ventaConOrden.html')
+    else:
+        return
+
