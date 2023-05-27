@@ -2,25 +2,116 @@
 
 
 {% block content %}
-{% csrf_token %}
+
 
 <style>
-.logout-button {
+  .logout-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: right;
+    position: sticky;
+    top: 0;
+    margin-bottom: 10px;
+  }
+ .register-button{ 
   display: inline-block;
-  padding: 10px 20px;
-  background-color: #f44336;
-  color: #ffffff;
-  text-decoration: none;
-  border-radius: 4px;
+    padding: 10px 20px;
+    background-color: #2e57df;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: right;
+  
+    top: 0;
+    margin-bottom: 10px;
+
 }
+  .logout-button:hover {
+    background-color: #d32f2f;
+  }
 
-.logout-button:hover {
-  background-color: #d32f2f;
-}
+  .table-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
+  table {
+    border-collapse: collapse;
+    width: 80%;
+    border-radius: 4px;
+  }
 
+  th,
+  td {
+    text-align: left;
+    padding: 8px;
+  }
+
+  th {
+    background-color: #67c0d4;
+    color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .acciones {
+    display: flex;
+  }
+
+  .acciones a button {
+    color: black;
+    text-decoration: none;
+    background-color: #4da0e8;
+    padding: 10px;
+    border-radius: 4px;
+  }
 </style>
-<a href="logout/" class="logout-button">Cerrar sesión</a>
+
+<a href="{% url 'register' %}" class="register-button">✚ Usuario</a>
+<a href="{% url 'admin' %}" class="register-button">♻ Actualizar</a>
+{{error}}
+<div class="table-container">
+  <table>
+    <tr>
+      <th>Usuario</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+    {% for user in users  %}
+    
+    <tr>
+      <td>{{user.nombreUsuario}}</td>
+      <td>{{ user.rol_id}}</td>
+      <td class="acciones">
+        <a href="#">
+       <form action="{% url 'delete' user.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" id="doc" name="doc" value="{{user.id}}" hidden >
+        {% if user.nombreUsuario == 'admin'%}
+        <h4>Este usuario no se puede eliminar</h4>
+        {%else%}
+        <button type="submit">eliminar</button>
+       </form>
+       {% endif %}
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
+  
+</div>
+<br/>
+<br/>
+
 
 
 
