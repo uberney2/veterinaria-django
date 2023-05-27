@@ -1,7 +1,9 @@
-% extends 'shared/base.html' %}
+{% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 <h1>COnfirmacion cancelacion Orden</h1>
 <br />
 <h1>{{mensaje}}</h1>
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

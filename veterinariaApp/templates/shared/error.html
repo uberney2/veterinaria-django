@@ -1,0 +1,20 @@
+{% extends 'shared/base.html' %}
+
+
+{% block content %}
+{% csrf_token %}
+
+
+
+    <a href="{% url 'inicio' %}" class="logout-button">Ir al Inicio</a>
+
+<br/>
+<br/>
+<div class="texto-estilizado">
+   {{error}}
+</div>
+<br/>
+<br/>
+
+
+{% endblock %}
