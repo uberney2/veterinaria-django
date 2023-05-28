@@ -3,7 +3,7 @@ import uuid
 from django.core.exceptions import ObjectDoesNotExist
 def buscar(usuario):
     try:
-        usuario_existente = Usuario.objects.get(nombreUsuario=usuario)
+        usuario_existente = Usuario.objects.using('mysql').get(nombreUsuario=usuario)
         return usuario_existente
     except ObjectDoesNotExist:
         return None
@@ -15,7 +15,7 @@ def addEmpleado(nombre, cedula, edad, rol, usuario, contraseña):
     else:
         id = uuid.uuid4()
         rol_objeto = Rol.objects.get(id=rol)
-        nuevo_usuario = Usuario.objects.create(
+        nuevo_usuario = Usuario.objects.using('mysql').create(
             id=id,
             nombreUsuario=usuario,
             Contraseña=contraseña,
@@ -35,7 +35,7 @@ Roles = {
     }
 def lookAll():
     
-    users = Usuario.objects.all()
+    users = Usuario.objects.using('mysql').all()
 
     for user in users:
          rol = user.rol_id

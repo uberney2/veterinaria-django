@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 
 def buscar(usuario):
     try:
-        usuario_existente = Usuario.objects.get(nombreUsuario=usuario)
+        usuario_existente = Usuario.objects.using('mysql').get(nombreUsuario=usuario)
         return usuario_existente
     except ObjectDoesNotExist:
         return None
