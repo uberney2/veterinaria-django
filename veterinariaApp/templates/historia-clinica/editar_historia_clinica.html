@@ -1,6 +1,7 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 {{hc}}
 <h1>formulario de edicion de Historia Clinica</h1>
 
@@ -48,5 +49,5 @@
     <!-- Resto de los campos -->
     <button type="submit">Guardar cambios</button>
 </form>
-
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

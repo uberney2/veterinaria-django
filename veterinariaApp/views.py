@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render, redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
+from veterinariaApp.controllers.AdminitradorController.AdministradorBussines import lookAll
 from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes
 from veterinariaApp.controllers.auth import autenticar
 from veterinariaApp.controllers.VendedorController.VendedorControllerBusiness import VentaOrden
@@ -9,9 +10,13 @@ from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from veterinariaApp.forms import BuscarUsuarioForm, CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm, comenzarCreaciónHistoriaClinicaForm
-from veterinariaApp.models import HistoriaClinica
+from veterinariaApp.models import HistoriaClinica, Usuario
 from .conexionMongoDB import collection
 from django.db import connection
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -54,7 +59,10 @@ def singup(request):
             log = autenticar(usuario, contraseña)
             if log is not None:
                 request.session['username'] = log.nombreUsuario
-                return render(request, 'shared/admin.html', {"url": "administrator/"})
+                if log.rol_id == "1":
+                    return redirect('admin')
+                elif log.rol_id == "2":
+                    return redirect('veterinario')
 
             else:
                 return render(request, 'shared/singup.html', {"url": " ", "error": "Usuario o contraseña incorrectos"})
@@ -65,74 +73,87 @@ def singup(request):
 def administrator(request):
     username = request.session.get('username')
     if username:
-        return render(request, 'shared/admin.html')
+        users = lookAll()
+        return render(request, 'shared/admin.html', {'users': users})
     else:
-        return render(request, 'shared/index.html', {"error": "debe estar autenticado"})
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def logout(request):
     request.session['username'] = None
-    return render(request, 'shared/index.html', {"error": "session cerrada"})
+    return render(request, 'shared/error.html', {"error": "session cerrada"})
 
 
 def crearHistoriaClinica(request, id):
-    print(id)
-    if request.method == 'GET':
-        return render(request, 'historia-clinica/historia_clinica.html', {
-            'form': CrearFormHistoriaClinica(),
-            'id': id
-        })
+    username = request.session.get('username')
+    if username:
+        print(id)
+        if request.method == 'GET':
+            return render(request, 'historia-clinica/historia_clinica.html', {
+                'form': CrearFormHistoriaClinica(),
+                'id': id
+            })
+        else:
+            medicoVeterinario = request.POST['medicoVeterinario']
+            motivoConsulta = request.POST['motivoConsulta']
+            sintomatologia = request.POST['sintomatologia']
+            diagnostico = request.POST['diagnostico']
+            procedimiento = request.POST['procedimiento']
+            medicamento = request.POST['medicamento']
+            dosis = request.POST['dosis']
+            idOrden = request.POST['idOrden']
+            historialVacunacion = request.POST['historialVacunacion']
+            alergiasMedicamentos = request.POST['alergiasMedicamentos']
+            detalleProcedimiento = request.POST['detalleProcedimiento']
+            estadoOrden = request.POST['estadoOrden']
+
+            CreacionHistoriaClinica(id, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento,
+                                    medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
+
+            return redirect('veterinario')
     else:
-        medicoVeterinario = request.POST['medicoVeterinario']
-        motivoConsulta = request.POST['motivoConsulta']
-        sintomatologia = request.POST['sintomatologia']
-        diagnostico = request.POST['diagnostico']
-        procedimiento = request.POST['procedimiento']
-        medicamento = request.POST['medicamento']
-        dosis = request.POST['dosis']
-        idOrden = request.POST['idOrden']
-        historialVacunacion = request.POST['historialVacunacion']
-        alergiasMedicamentos = request.POST['alergiasMedicamentos']
-        detalleProcedimiento = request.POST['detalleProcedimiento']
-        estadoOrden = request.POST['estadoOrden']
-
-        CreacionHistoriaClinica(id, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento,
-                                medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
-
-        return redirect('veterinario')
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def crearDueñoMascota(request):
-    if request.method == 'GET':
-        print("entre")
-        return render(request, 'historia-clinica/registro_dueño_mascota.html', {
-            'form': AgregarDueñoMascotaForm()
-        })
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            print("entre")
+            return render(request, 'historia-clinica/registro_dueño_mascota.html', {
+                'form': AgregarDueñoMascotaForm()
+            })
+        else:
+            cedula = request.POST['cedula']
+            nombre = request.POST['nombre']
+            edad = request.POST['edad']
+            AgregarDueñoMascota(cedula, nombre, edad)
+            return redirect('dueño')
     else:
-        cedula = request.POST['cedula']
-        nombre = request.POST['nombre']
-        edad = request.POST['edad']
-        AgregarDueñoMascota(cedula, nombre, edad)
-        return redirect('dueño')
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def crearMascota(request):
-    if request.method == 'GET':
-        print("entre")
-        return render(request, 'historia-clinica/agregar-mascota.html', {
-            'form': AgregarMascotaForm()
-        })
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            print("entre")
+            return render(request, 'historia-clinica/agregar-mascota.html', {
+                'form': AgregarMascotaForm()
+            })
+        else:
+            nombre = request.POST['nombre']
+            cedula_dueño = request.POST['cedula_dueño']
+            edad = request.POST['edad']
+            especie = request.POST['especie']
+            raza = request.POST['raza']
+            caracteristicas = request.POST['caracteristicas']
+            peso = request.POST['peso']
+            AgregarMascota(nombre, cedula_dueño, edad, especie,
+                           raza, caracteristicas, peso)
+            return redirect('mascota')
     else:
-        nombre = request.POST['nombre']
-        cedula_dueño = request.POST['cedula_dueño']
-        edad = request.POST['edad']
-        especie = request.POST['especie']
-        raza = request.POST['raza']
-        caracteristicas = request.POST['caracteristicas']
-        peso = request.POST['peso']
-        AgregarMascota(nombre, cedula_dueño, edad, especie,
-                       raza, caracteristicas, peso)
-        return redirect('mascota')
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def eliminarUser(request, user_id):
@@ -152,11 +173,13 @@ def ventaSinOrden(request):
         return render(request, 'medicamento/ventaSinOrden.html')
     else:
         cedula = request.POST["cedula"]
-        medicamentos = [valor.strip() for valor in request.POST["medicamentos"].split(",")]
+        medicamentos = [valor.strip()
+                        for valor in request.POST["medicamentos"].split(",")]
         cantidad = request.POST["cantidad"]
         valor = request.POST["valor"]
-        VentaOrden(cedula,medicamentos,cantidad,valor)
+        VentaOrden(cedula, medicamentos, cantidad, valor)
         return redirect('ventaSinOrden')
+
 
 def ventaConOrden(request):
     if request.method == 'GET':
@@ -164,151 +187,191 @@ def ventaConOrden(request):
 
 
 def indexHistoriaClinica(request):
-    return render(request, 'historia-clinica/indexVeterinario.html')
+    username = request.session.get('username')
+    if username:
+        return render(request, 'historia-clinica/indexVeterinario.html')
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def desarrolloHistoriaClinica(request):
-    if request.method == 'GET':
-        return render(request, 'historia-clinica/comienzo_hc.html', {
-            'form': BuscarUsuarioForm(),
-            'disableBuscarUsuario': False
-        })
-    else:
-        cedula_dueño = request.POST['cedula_dueño']
-        dueño = BuscarDueño(cedula_dueño)
-        if dueño is None:
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
             return render(request, 'historia-clinica/comienzo_hc.html', {
                 'form': BuscarUsuarioForm(),
-                'hasDueño': False,
-                'disableBuscarUsuario': True
+                'disableBuscarUsuario': False
             })
         else:
-            mascotas = buscarMascota(dueño.id)
-            if mascotas is None:
+            cedula_dueño = request.POST['cedula_dueño']
+            dueño = BuscarDueño(cedula_dueño)
+            if dueño is None:
                 return render(request, 'historia-clinica/comienzo_hc.html', {
                     'form': BuscarUsuarioForm(),
-                    'hasDueño': True,
-                    'mascotas': None,
+                    'hasDueño': False,
                     'disableBuscarUsuario': True
                 })
             else:
-                return render(request, 'historia-clinica/comienzo_hc.html', {
-                    'form': BuscarUsuarioForm(),
-                    'formMascota': comenzarCreaciónHistoriaClinicaForm(),
-                    'hasDueño': True,
-                    'mascotas': mascotas,
-                    'disableBuscarUsuario': True,
-                })
+                mascotas = buscarMascota(dueño.id)
+                if mascotas is None:
+                    return render(request, 'historia-clinica/comienzo_hc.html', {
+                        'form': BuscarUsuarioForm(),
+                        'hasDueño': True,
+                        'mascotas': None,
+                        'disableBuscarUsuario': True
+                    })
+                else:
+                    return render(request, 'historia-clinica/comienzo_hc.html', {
+                        'form': BuscarUsuarioForm(),
+                        'formMascota': comenzarCreaciónHistoriaClinicaForm(),
+                        'hasDueño': True,
+                        'mascotas': mascotas,
+                        'disableBuscarUsuario': True,
+                    })
+
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def editarHistoriaClinica(request):
-    if request.method == 'GET':
-        return render(request, 'historia-clinica/comienzo_edicion.html', {
-            'form': BuscarUsuarioForm(),
-            'disableBuscarUsuario': False
-        })
-    else:
-        cedula_dueño = request.POST['cedula_dueño']
-        dueño = BuscarDueño(cedula_dueño)
-        if dueño is None:
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
             return render(request, 'historia-clinica/comienzo_edicion.html', {
-                'hasDueño': False,
-                'disableBuscarUsuario': True
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False
             })
         else:
-            mascotas = buscarMascota(dueño.id)
-            if mascotas is None:
+            cedula_dueño = request.POST['cedula_dueño']
+            dueño = BuscarDueño(cedula_dueño)
+            if dueño is None:
                 return render(request, 'historia-clinica/comienzo_edicion.html', {
-                    'hasDueño': True,
-                    'mascotas': None,
+                    'hasDueño': False,
                     'disableBuscarUsuario': True
                 })
             else:
-                return render(request, 'historia-clinica/comienzo_edicion.html', {
-                    'hasDueño': True,
-                    'mascotas': mascotas,
-                    'disableBuscarUsuario': True
-                })
+                mascotas = buscarMascota(dueño.id)
+                if mascotas is None:
+                    return render(request, 'historia-clinica/comienzo_edicion.html', {
+                        'hasDueño': True,
+                        'mascotas': None,
+                        'disableBuscarUsuario': True
+                    })
+                else:
+                    return render(request, 'historia-clinica/comienzo_edicion.html', {
+                        'hasDueño': True,
+                        'mascotas': mascotas,
+                        'disableBuscarUsuario': True
+                    })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def listarHistoriaClinica(request, id):
-    if request.method == 'GET':
-        historiasClinicas = BuscarHistoriasbyId(id)
-        print(historiasClinicas)
-        return render(request, 'historia-clinica/ver_historias_clinicas.html', {
-            'form': BuscarUsuarioForm(),
-            'disableBuscarUsuario': False,
-            'historias': historiasClinicas
-        })
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            historiasClinicas = BuscarHistoriasbyId(id)
+            print(historiasClinicas)
+            return render(request, 'historia-clinica/ver_historias_clinicas.html', {
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False,
+                'historias': historiasClinicas
+            })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def edicionHistoriaClinica(request, id):
-    fecha = request.GET.get('fecha')
-    historiaClinica = consultarHistoriaClinicaByFecha(fecha, id)
-    if request.method == 'GET':
-        hc = historiaClinica.get(id, {}).get(fecha, None)
-        return render(request, 'historia-clinica/editar_historia_clinica.html', {
-            'form': BuscarUsuarioForm(),
-            'disableBuscarUsuario': False,
-            'hc': hc,
-            'id': id,
-            'fecha': fecha
-        })
+    username = request.session.get('username')
+    if username:
+        fecha = request.GET.get('fecha')
+        historiaClinica = consultarHistoriaClinicaByFecha(fecha, id)
+        if request.method == 'GET':
+            hc = historiaClinica.get(id, {}).get(fecha, None)
+            return render(request, 'historia-clinica/editar_historia_clinica.html', {
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False,
+                'hc': hc,
+                'id': id,
+                'fecha': fecha
+            })
+        else:
+            fecha = request.POST['fecha']
+            medicoVeterinario = request.POST['medicoVeterinario']
+            motivoConsulta = request.POST['motivoConsulta']
+            sintomatologia = request.POST['sintomatologia']
+            diagnostico = request.POST['diagnostico']
+            procedimiento = request.POST['procedimiento']
+            medicamento = request.POST['medicamento']
+            dosis = request.POST['dosis']
+            idOrden = request.POST['idOrden']
+            historialVacunacion = request.POST['historialVacunacion']
+            alergiasMedicamentos = request.POST['alergiasMedicamentos']
+            detalleProcedimiento = request.POST['detalleProcedimiento']
+            estadoOrden = request.POST['estadoOrden']
+            updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento,
+                                  medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
+            return redirect('veterinario')
     else:
-        fecha = request.POST['fecha']
-        medicoVeterinario = request.POST['medicoVeterinario']
-        motivoConsulta = request.POST['motivoConsulta']
-        sintomatologia = request.POST['sintomatologia']
-        diagnostico = request.POST['diagnostico']
-        procedimiento = request.POST['procedimiento']
-        medicamento = request.POST['medicamento']
-        dosis = request.POST['dosis']
-        idOrden = request.POST['idOrden']
-        historialVacunacion = request.POST['historialVacunacion']
-        alergiasMedicamentos = request.POST['alergiasMedicamentos']
-        detalleProcedimiento = request.POST['detalleProcedimiento']
-        estadoOrden = request.POST['estadoOrden']
-        updateHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento,
-                              medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
-        return redirect('veterinario')
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def cancelarOrden(request):
-    if request.method == 'GET':
-        return render(request, 'historia-clinica/cancelar-orden.html', {
-            'form': BuscarUsuarioForm(),
-            'disableBuscarUsuario': False,
-        })
-    else:
-        cedula_dueño = request.POST['cedula_dueño']
-        dueño = BuscarDueño(cedula_dueño)
-        if dueño is None:
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
             return render(request, 'historia-clinica/cancelar-orden.html', {
-                'hasDueño': False,
-                'disableBuscarUsuario': True
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False,
             })
         else:
-            ordenes = buscarOrdenes(cedula_dueño)
-            if ordenes is None:
+            cedula_dueño = request.POST['cedula_dueño']
+            dueño = BuscarDueño(cedula_dueño)
+            if dueño is None:
                 return render(request, 'historia-clinica/cancelar-orden.html', {
-                    'hasDueño': True,
-                    'ordenes': None,
+                    'hasDueño': False,
                     'disableBuscarUsuario': True
                 })
             else:
-                return render(request, 'historia-clinica/cancelar-orden.html', {
-                    'hasDueño': True,
-                    'ordenes': ordenes,
-                    'disableBuscarUsuario': True
-                })
+                ordenes = buscarOrdenes(cedula_dueño)
+                if ordenes is None:
+                    return render(request, 'historia-clinica/cancelar-orden.html', {
+                        'hasDueño': True,
+                        'ordenes': None,
+                        'disableBuscarUsuario': True
+                    })
+                else:
+                    return render(request, 'historia-clinica/cancelar-orden.html', {
+                        'hasDueño': True,
+                        'ordenes': ordenes,
+                        'disableBuscarUsuario': True
+                    })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def confirmacionCancelacionOrden(request, id):
-    if request.method == 'GET':
-        fecha = request.GET.get('fecha')
-        idMascota = request.GET.get('idMascota')
-        cencelacion = cancelarOrdenes(id, fecha, idMascota)
-        return render(request, 'historia-clinica/cancelar-orden.html', {
-            'form': BuscarUsuarioForm(),
-            'disableBuscarUsuario': False,
-        })
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            fecha = request.GET.get('fecha')
+            idMascota = request.GET.get('idMascota')
+            cencelacion = cancelarOrdenes(id, fecha, idMascota)
+            return render(request, 'historia-clinica/cancelar-orden.html', {
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False,
+            })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+
+
+def eliminarUser(request, user_id):
+    try:
+        user = Usuario.objects.using('mysql').get(pk=user_id)
+        if request.method == 'POST':
+            user.delete()
+            return render(request, 'shared/admin.html', {"error": "Eliminado. Por favor, actualice la página."})
+        return render(request, 'shared/admin.html', {"error": "No se pudo eliminar."})
+    except ObjectDoesNotExist:
+        return render(request, 'shared/admin.html', {"error": "El usuario no existe."})

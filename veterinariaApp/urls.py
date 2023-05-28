@@ -3,11 +3,11 @@ from . import views
 
 
 urlpatterns=[
-    path('', views.iniciar, name="inicio"),
-    path('register/', views.register ),
-    path('singup/',views.singup),
-    path('administrator/', views.administrator ),
-    path('singup/logout/',views.logout),
+    path('', views.iniciar, name='inicio'),
+    path('register/', views.register, name='register'),
+    path('singup/',views.singup, name='singup'),
+    path('administrator/', views.administrator, name='admin' ),
+    path('singup/logout/',views.logout,name='logout'),
     path('hc/<str:id>', views.crearHistoriaClinica, name = 'hc' ),
     path('dueño-mascota/', views.crearDueñoMascota, name = 'dueño' ),
     path('mascota/', views.crearMascota, name = 'mascota' ),
@@ -21,4 +21,5 @@ urlpatterns=[
     path('vendedor/', views.vendedor, name='vendedor'),
     path('ventaSinOrden/', views.ventaSinOrden, name='ventaSinOrden'),
     path('ventaConOrden/', views.ventaConOrden, name='ventaConOrden'),
+    path('error/<str:user_id>/delete', views.eliminarUser, name = 'delete' ),
 ]

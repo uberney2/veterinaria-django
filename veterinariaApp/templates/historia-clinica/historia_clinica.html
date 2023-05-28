@@ -1,6 +1,7 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 <h1>Crear Historia Clinica</h1>
 
 <form method="POST" action="{% url 'hc' id %}">
@@ -10,5 +11,5 @@
         Save
     </button>
 </form>
-
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

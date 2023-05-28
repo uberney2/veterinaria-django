@@ -1,0 +1,32 @@
+{%load static %}
+<style>
+
+.nav-link {
+        display: inline-block;
+        padding: 10px;
+        background-color: #7DE9F1;
+        color: #333;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-right: 23px;
+      }
+      
+      .nav-link:hover {
+        background-color: #ddd;
+      }
+   .nav{
+background-color: #B3EAEF;
+padding: 10px;
+border-radius: 12px;
+width: 95%;
+
+   }
+</style>
+<div class="nav">
+    <a class="nav-link" href="{% url 'veterinario' %}">Inicio</a>  
+    <a class="nav-link" href="{% url 'dueño' %}">Agregar Dueño de la mascota</a>
+    <a class="nav-link" href="{% url 'mascota' %}">Agregar Mascota</a>
+    <a class="nav-link" href="{% url 'crear-historia' %}">Crear historia clinica</a>
+    <a class="nav-link" href="{% url 'editar-historia' %}">Editar Historia Clinica</a>
+    <a class="nav-link" href="{% url 'cancelar-orden' %}">Cancelar Orden</a>
+  </div>

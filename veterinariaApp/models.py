@@ -88,7 +88,8 @@ class Factura(models.Model):
         db_table = 'Factura'
 
 class Productos(models.Model):
-    cedula_comprador = models.CharField(max_length=200, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    cedula_comprador = models.CharField(max_length=200)
     medicamento = models.CharField(max_length=200)
     cantidad = models.CharField(max_length=200)
     valor_venta = models.CharField(max_length=200)
