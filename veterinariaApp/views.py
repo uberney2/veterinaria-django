@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from veterinariaApp.forms import CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm
 from veterinariaApp.models import HistoriaClinica,Usuario
 from .conexionMongoDB import collection
-
+from django.db import connection
 
 
 def iniciar(request):
@@ -172,3 +172,27 @@ def eliminarUser(request,user_id):
     user.delete()
     return render(request,'shared/admin.html',{"error":"eliminado, Actualice por favor"})
    return render(request,'shared/admin.html',{"error":"No pudo ser eliminado "})
+
+def vendedor(request):
+    return render(request, 'medicamento/vendedor.html')
+
+
+
+def ventaSinOrden(request):
+    if request.method == 'GET':
+        return render(request, 'medicamento/ventaSinOrden.html')
+    else:
+        cedula_comprador = request.POST['cedula_comprador']
+        medicamento = request.POST['medicamento']
+        cantidad = request.POST['cantidad']
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO productos (cedula_comprador, medicamento, cantidad) VALUES (%s, %s,%s)", [cedula_comprador, medicamento,cantidad])
+        return render(request, 'medicamento/ventaSinOrden.html')
+    
+    
+    
+
+def ventaConOrden(request):
+    if request.method == 'GET':
+        return render(request, 'medicamento/ventaConOrden.html')
+    

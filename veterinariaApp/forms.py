@@ -31,3 +31,8 @@ class AgregarMascotaForm(forms.Form):
     raza = forms.CharField(label="Raza", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     caracteristicas = forms.CharField(label="Caracteristicas", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     peso = forms.CharField(label="Peso", max_length=3, widget=forms.TextInput(attrs={'class': 'input'}))
+
+class ventaSinOrden(forms.Form):
+    cedula_comprador = forms.CharField(label="Ingrese su cedula", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
+    medicamento = forms.CharField(label="Ingrese el medicamento", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
+    cantidad = forms.CharField(label="Ingrese la cantidad", max_length=3, widget=forms.TextInput(attrs={'class': 'input'}))

@@ -83,4 +83,13 @@ class Factura(models.Model):
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Factura'
+
+class Productos(models.Model):
+    cedula_comprador = models.CharField(max_length=200, primary_key=True)
+    medicamento = models.CharField(max_length=200)
+    cantidad = models.CharField(max_length=200)
+
+    class Meta:
+        app_label = 'veterinariaApp'
+        db_table = 'Productos'
         

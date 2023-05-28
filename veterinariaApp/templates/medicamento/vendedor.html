@@ -1,0 +1,13 @@
+{% extends 'shared/base.html' %}
+
+
+{% block content %}
+
+{% load static %}
+
+
+{% csrf_token %}
+<a style="text-decoration: none;"  href="{% url 'ventaConOrden' %}">Ir a venta con orden</a>
+<a href="{% url 'ventaSinOrden' %}">Ir a venta sin orden</a>
+
+{% endblock %}

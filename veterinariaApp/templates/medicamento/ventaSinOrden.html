@@ -1,0 +1,110 @@
+{% extends 'shared/base.html' %}
+
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <h1>Formulario de venta de medicamentos</h1>
+    <form>
+        <div class="form-group">
+            <label for="Cedula">Cédula del cliente:</label required>
+            <input type="text" class="form-control" id="Cedula" placeholder="Ingrese su cédula" required>
+        </div>
+        <div class="form-group">
+            <label for="medicamento">Seleccione el medicamento:</label>
+        </div>
+        <div class="form-group">
+            <label for="medicamento"></label>
+            <select id="medicamento" name="medicamento" required>
+                <option value="">Seleccionar</option>
+                <option value="Medicamento1" data-precio="10.99">Desparasitante para perro: $10.99</option>
+                <option value="Medicamento2" data-precio="8.50">Desparasitante para gato: $8.50</option>
+                <option value="Medicamento3" data-precio="5.99">Prevención de pulgas: $5.99</option>
+                <option value="Medicamento4" data-precio="3.99">Analgésico: $3.99</option>
+                <option value="Medicamento5" data-precio="1.99">Aspirina: $1.99</option>
+                <option value="Medicamento6" data-precio="2.99">Acetaminofen: $2.99</option>
+                <option value="Medicamento7" data-precio="15.99">Suero: $15.99</option>
+                <option value="Medicamento8" data-precio="7.99">Amoxicilina: $7.99</option>
+                <option value="Medicamento9" data-precio="6.99">Gotas para ojos: $6.99</option>
+            </select><br>
+        </div>
+        <br>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" class="form-control" id="cantidad" placeholder="Ingrese la cantidad de medicamentos">
+        <br>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+<br>   
+
+<!-- <h1>Venta sin orden</h1>
+
+<form method="POST" action="{% url 'ventaSinOrden' %}">
+    {% csrf_token %}
+    {{ form.cedula.label_tag }}
+    {{ form.cedula }}
+    <br>
+    
+    {{ form.cedula_dueño.label_tag }}
+    {{ form.cedula_dueño }}
+    <br>
+    
+    {{ form.edad.label_tag }}
+    {{ form.edad }}
+    <br>
+    
+    {{ form.especie.label_tag }}
+    {{ form.especie }}
+    <br>
+
+    {{ form.raza.label_tag }}
+    {{ form.raza }}
+    <br>
+
+    {{ form.caracteristicas.label_tag }}
+    {{ form.caracteristicas }}
+    <br>
+
+    {{ form.peso.label_tag }}
+    {{ form.peso }}
+    <br>
+    <button>
+        Save
+    </button>
+</form> -->
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Venta</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Venta</h1>
+        <form method="POST" action="/guardar_venta">
+            <div class="form-group">
+                <label for="cedula">Cédula:</label>
+                <input type="text" class="form-control" id="cedula" name="cedula" required>
+            </div>
+            <div class="form-group">
+                <label for="producto">Producto:</label>
+                <select class="form-control" id="producto" name="producto" required>
+                    <option value="producto1">Producto 1</option>
+                    <option value="producto2">Producto 2</option>
+                    <option value="producto3">Producto 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</body>
+</html> -->
+
+{% endblock %}
