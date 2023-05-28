@@ -1,6 +1,7 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 <h1>Registrar el dueño de la mascota</h1>
 
 <form method="POST" action="{% url 'dueño' %}">
@@ -24,5 +25,5 @@
         Save
     </button>
 </form>
-
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

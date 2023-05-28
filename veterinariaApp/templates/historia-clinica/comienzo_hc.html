@@ -1,6 +1,7 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 <h1>HC</h1>
 <br />
 {% if disableBuscarUsuario == False %}
@@ -39,5 +40,5 @@
 {% endfor %}
 
 {% endif %}
-
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

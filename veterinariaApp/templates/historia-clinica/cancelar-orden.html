@@ -1,6 +1,7 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 <h1>Cancelar Orden</h1>
 <br />
 
@@ -51,5 +52,5 @@
 {% endfor %}
 
 {% endif %}
-
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

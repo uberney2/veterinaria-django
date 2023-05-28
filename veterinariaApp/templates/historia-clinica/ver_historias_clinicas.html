@@ -1,6 +1,7 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% include 'shared/navbar-vet.html' %}
 <h1>Lista de historias Clinicas</h1>
 <h1> Click sobre la fecha a la cual desea realizarle modificaciones</h1>
 
@@ -26,5 +27,5 @@
     </div>
   {% endfor %}
 {% endfor %}
-
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}
