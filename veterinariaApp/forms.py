@@ -3,8 +3,6 @@ from django import forms
 from veterinariaApp.Enums.rolesEnum import Roles
 
 class CrearFormHistoriaClinica(forms.Form):
-    _id = forms.CharField(label="Identificacion de la mascosta", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
-    fechaConsulta = forms.CharField(label="Fecha", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     medicoVeterinario = forms.CharField(label="Nombre del medico", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     motivoConsulta = forms.CharField(label="Motivo consulta", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     medicamento = forms.CharField(label="Medicamento", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
@@ -36,3 +34,11 @@ class ventaSinOrden(forms.Form):
     cedula_comprador = forms.CharField(label="Ingrese su cedula", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     medicamento = forms.CharField(label="Ingrese el medicamento", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
     cantidad = forms.CharField(label="Ingrese la cantidad", max_length=3, widget=forms.TextInput(attrs={'class': 'input'}))
+    valor_venta = forms.CharField(label="Ingrese la cantidad", max_length=3, widget=forms.TextInput(attrs={'class': 'input'}))
+    
+class BuscarUsuarioForm(forms.Form):
+    cedula_dueño = forms.CharField(label="Cedula del dueño de la mascota", max_length=20, widget=forms.TextInput(attrs={'class': 'input'}))
+    
+class comenzarCreaciónHistoriaClinicaForm(forms.Form):
+    idMascota = forms.CharField(label="Identificación de la mascota", max_length=100, widget=forms.TextInput(attrs={'class': 'input'}))
+

@@ -1,0 +1,30 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<h1>Lista de historias Clinicas</h1>
+<h1> Click sobre la fecha a la cual desea realizarle modificaciones</h1>
+
+{% for historia_id, historia_data in historias.items %}
+  {% for fecha, datos in historia_data.items %}
+    <div>
+        <a href="{% url 'editar-historia-clinica' historia_id %}?fecha={{ fecha }}">
+            <h2>{{ fecha }}</h2>
+        </a>
+        <p>Medico Veterinario: {{ datos.medicoVeterinario }}</p>
+        <p>Motivo de Consulta: {{ datos.motivoConsulta }}</p>
+        <p>Sintomatología: {{ datos.sintomatologia }}</p>
+        <p>diagnostico: {{ datos.diagnostico }}</p>
+        <p>procedimiento: {{ datos.procedimiento }}</p>
+        <p>medicamento: {{ datos.medicamento }}</p>
+        <p>dosis: {{ datos.dosis }}</p>
+        <p>idOrden: {{ datos.idOrden }}</p>
+        <p>historialVacunacion: {{ datos.historialVacunacion }}</p>
+        <p>alergiasMedicamentos: {{ datos.alergiasMedicamentos }}</p>
+        <p>detalleProcedimiento: {{ datos.detalleProcedimiento }}</p>
+        <p>estadoOrden: {{ datos.estadoOrden }}</p>
+
+    </div>
+  {% endfor %}
+{% endfor %}
+
+{% endblock %}

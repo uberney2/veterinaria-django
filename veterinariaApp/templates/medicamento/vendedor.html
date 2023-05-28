@@ -7,7 +7,60 @@
 
 
 {% csrf_token %}
-<a style="text-decoration: none;"  href="{% url 'ventaConOrden' %}">Ir a venta con orden</a>
-<a href="{% url 'ventaSinOrden' %}">Ir a venta sin orden</a>
+<!-- <a style="text-decoration: none;"  href="{% url 'ventaConOrden' %}">Ir a venta con orden</a>
+<a href="{% url 'ventaSinOrden' %}">Ir a venta sin orden</a> -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Veterinaria</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Veterinaria nurgo 🐹. Medicamentos responsables para tu mascota.</a>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <h1>Bienvenido a nuestra veterinaria</h1>
+        <ul class="bootstrap">
+            <li>Las mascotas son nuestros fieles compañeros, llenan nuestras vidas de alegría y amor incondicional.</li>
+            <li>De mi mascota he aprendido que caundo alguien tienen un mal dia, basta con sentarse en silencio y
+                acompañarle.</li>
+            <li>Amar a un animal es verse reflejado en una mirada que lo espera todo de ti, que te invita a una caricia,
+                que te arranca sonrisas y nobles emociones. Lo único que te pide a cambio… Es amor. Cada uno de nosotros
+                podríamos relatar con gran cariño ese instante en que alguien muy especial llegó a casa y… la puso del
+                revés.</li>
+            <li>El amor a las mascotas es más común de lo que crees, por ello, se ha establecido el Día Mundial de Amar
+                a tu Mascota para demostrarle lo especial que es para ti. No importa si es un animal que vuela, nada o
+                corre en cuatro patas, su compañía siempre será única y te hará sentir feliz aun cuando tengas días
+                complicados.</li>
+        </ul>
+
+        <br>
+
+        <p><strong>Elige una opción:</strong></p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <a class="btn btn-primary btn-block" href="{% url 'ventaConOrden' %}">Ir a venta con orden</a>
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-secondary btn-block" href="{% url 'ventaSinOrden' %}">Ir a venta sin orden</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
 
 {% endblock %}

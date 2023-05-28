@@ -26,27 +26,3 @@ def addEmpleado(nombre, cedula, edad, rol, usuario, contraseña):
         )
         nuevo_usuario.save()
         return nuevo_usuario
-    
-Roles = {
-        "1": "Administrador",
-        "2": "Veterinario",
-        "3": "Vendedor",
-        "4": "Dueño de mascota"
-    }
-def lookAll():
-    
-    users = Usuario.objects.all()
-
-    for user in users:
-         rol = user.rol_id
-         user.rol_id = Roles.get(rol)
-
-    return users
-
-# def eliminarPersona(Id):
-#     empleado = Usuario.objects.get(id=Id)
-#     if empleado is not None:
-#         empleado.delete()
-#         return True
-#     else:
-#         return False
