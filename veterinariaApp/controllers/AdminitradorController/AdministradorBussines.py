@@ -14,7 +14,7 @@ def addEmpleado(nombre, cedula, edad, rol, usuario, contraseña):
         return None
     else:
         id = uuid.uuid4()
-        rol_objeto = Rol.objects.get(id=rol)
+        rol_objeto = Rol.objects.using('mysql').get(id=rol)
         nuevo_usuario = Usuario.objects.using('mysql').create(
             id=id,
             nombreUsuario=usuario,
