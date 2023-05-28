@@ -4,6 +4,7 @@ from veterinariaApp.controllers.AdminitradorController.AdministradorInputs impor
 from veterinariaApp.controllers.AdminitradorController.AdministradorBussines import lookAll
 from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes
 from veterinariaApp.controllers.auth import autenticar
+from veterinariaApp.controllers.VendedorController.VendedorControllerBusiness import VentaOrden
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.http import HttpResponse
@@ -11,7 +12,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from veterinariaApp.forms import BuscarUsuarioForm, CrearFormHistoriaClinica, AgregarDueñoMascotaForm, AgregarMascotaForm, comenzarCreaciónHistoriaClinicaForm
 from veterinariaApp.models import HistoriaClinica, Usuario
 from .conexionMongoDB import collection
+from django.db import connection
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def iniciar(request):
@@ -55,7 +61,7 @@ def singup(request):
                 request.session['username'] = log.nombreUsuario
                 if log.rol_id == "1":
                     return redirect('admin')
-                elif log.rol_id == "4":
+                elif log.rol_id == "2":
                     return redirect('veterinario')
 
             else:
@@ -148,6 +154,36 @@ def crearMascota(request):
             return redirect('mascota')
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+
+
+def eliminarUser(request, user_id):
+    user = get_object_or_404(Usuario, pk=user_id)
+    if request.method == 'POST':
+        user.delete()
+        return render(request, 'shared/admin.html', {"error": "eliminado, Actualice por favor"})
+    return render(request, 'shared/admin.html', {"error": "No pudo ser eliminado "})
+
+
+def vendedor(request):
+    return render(request, 'medicamento/vendedor.html')
+
+
+def ventaSinOrden(request):
+    if request.method == 'GET':
+        return render(request, 'medicamento/ventaSinOrden.html')
+    else:
+        cedula = request.POST["cedula"]
+        medicamentos = [valor.strip()
+                        for valor in request.POST["medicamentos"].split(",")]
+        cantidad = request.POST["cantidad"]
+        valor = request.POST["valor"]
+        VentaOrden(cedula, medicamentos, cantidad, valor)
+        return redirect('ventaSinOrden')
+
+
+def ventaConOrden(request):
+    if request.method == 'GET':
+        return render(request, 'medicamento/ventaConOrden.html')
 
 
 def indexHistoriaClinica(request):
@@ -329,9 +365,13 @@ def confirmacionCancelacionOrden(request, id):
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
+
 def eliminarUser(request, user_id):
-    user = get_object_or_404(Usuario, pk=user_id)
-    if request.method == 'POST':
-        user.delete()
-        return render(request, 'shared/admin.html', {"error": "eliminado, Actualice por favor"})
-    return render(request, 'shared/admin.html', {"error": "No pudo ser eliminado "})
+    try:
+        user = Usuario.objects.using('mysql').get(pk=user_id)
+        if request.method == 'POST':
+            user.delete()
+            return render(request, 'shared/admin.html', {"error": "Eliminado. Por favor, actualice la página."})
+        return render(request, 'shared/admin.html', {"error": "No se pudo eliminar."})
+    except ObjectDoesNotExist:
+        return render(request, 'shared/admin.html', {"error": "El usuario no existe."})

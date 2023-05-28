@@ -18,7 +18,8 @@ urlpatterns=[
     path('editar-historia-clinica/<str:id>', views.edicionHistoriaClinica, name = 'editar-historia-clinica' ),
     path('cancelar-orden/', views.cancelarOrden, name = 'cancelar-orden' ),
     path('confirmacion-cancelar-orden/<str:id>', views.confirmacionCancelacionOrden, name = 'confirmacion-cancelar-orden' ),
+    path('vendedor/', views.vendedor, name='vendedor'),
+    path('ventaSinOrden/', views.ventaSinOrden, name='ventaSinOrden'),
+    path('ventaConOrden/', views.ventaConOrden, name='ventaConOrden'),
     path('error/<str:user_id>/delete', views.eliminarUser, name = 'delete' ),
 ]
-
- 
