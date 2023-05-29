@@ -63,6 +63,8 @@ def singup(request):
                     return redirect('admin')
                 elif log.rol_id == "2":
                     return redirect('veterinario')
+                else:
+                    return redirect('vendedor')
 
             else:
                 return render(request, 'shared/singup.html', {"url": " ", "error": "Usuario o contraseña incorrectos"})
@@ -165,25 +167,37 @@ def eliminarUser(request, user_id):
 
 
 def vendedor(request):
-    return render(request, 'medicamento/vendedor.html')
+    username = request.session.get('username')
+    if username:
+        return render(request, 'medicamento/vendedor.html')
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def ventaSinOrden(request):
-    if request.method == 'GET':
-        return render(request, 'medicamento/ventaSinOrden.html')
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            return render(request, 'medicamento/ventaSinOrden.html')
+        else:
+            cedula = request.POST["cedula"]
+            medicamentos = [valor.strip()
+                            for valor in request.POST["medicamentos"].split(",")]
+            cantidad = request.POST["cantidad"]
+            valor = request.POST["valor"]
+            VentaOrden(cedula, medicamentos, cantidad, valor)
+            return redirect('ventaSinOrden')
     else:
-        cedula = request.POST["cedula"]
-        medicamentos = [valor.strip()
-                        for valor in request.POST["medicamentos"].split(",")]
-        cantidad = request.POST["cantidad"]
-        valor = request.POST["valor"]
-        VentaOrden(cedula, medicamentos, cantidad, valor)
-        return redirect('ventaSinOrden')
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def ventaConOrden(request):
-    if request.method == 'GET':
-        return render(request, 'medicamento/ventaConOrden.html')
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            return render(request, 'medicamento/ventaConOrden.html')
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def indexHistoriaClinica(request):
