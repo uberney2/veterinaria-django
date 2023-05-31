@@ -75,7 +75,7 @@ def AgregarMascota(nombre, cedulaDueño, edad, especie, raza, caracteristicas, p
     
     return
 
-def CreacionHistoriaClinica(id, profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
+def CreacionHistoriaClinica(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, vacunas, alergiaMedicamentos, detalleProcedimiento ):
     if motivoConsulta == None or motivoConsulta == " ":
         print("Motivo onsulta no pueden ser un espacio vacio")
         return
@@ -103,7 +103,7 @@ def CreacionHistoriaClinica(id, profesionalAtiende, motivoConsulta, sintomatolog
     if medicamento == None or medicamento == "":
         medicamento = "ninguno"
     
-    HistoriaClinicaCreacion(id, profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento )
+    HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, vacunas, alergiaMedicamentos, detalleProcedimiento )
     
 def BuscarDueño(cedula_dueño):
     if cedula_dueño == None or cedula_dueño == " ":

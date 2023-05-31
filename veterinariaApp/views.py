@@ -93,24 +93,21 @@ def crearHistoriaClinica(request, id):
         if request.method == 'GET':
             return render(request, 'historia-clinica/historia_clinica.html', {
                 'form': CrearFormHistoriaClinica(),
-                'id': id
+                'id': id,
             })
         else:
-            medicoVeterinario = request.POST['medicoVeterinario']
             motivoConsulta = request.POST['motivoConsulta']
             sintomatologia = request.POST['sintomatologia']
             diagnostico = request.POST['diagnostico']
             procedimiento = request.POST['procedimiento']
             medicamento = request.POST['medicamento']
             dosis = request.POST['dosis']
-            idOrden = request.POST['idOrden']
             historialVacunacion = request.POST['historialVacunacion']
             alergiasMedicamentos = request.POST['alergiasMedicamentos']
             detalleProcedimiento = request.POST['detalleProcedimiento']
-            estadoOrden = request.POST['estadoOrden']
 
-            CreacionHistoriaClinica(id, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento,
-                                    medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
+            CreacionHistoriaClinica(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento,
+                                    medicamento, dosis, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
 
             return redirect('veterinario')
     else:
@@ -121,7 +118,6 @@ def crearDueñoMascota(request):
     username = request.session.get('username')
     if username:
         if request.method == 'GET':
-            print("entre")
             return render(request, 'historia-clinica/registro_dueño_mascota.html', {
                 'form': AgregarDueñoMascotaForm()
             })
@@ -130,7 +126,7 @@ def crearDueñoMascota(request):
             nombre = request.POST['nombre']
             edad = request.POST['edad']
             AgregarDueñoMascota(cedula, nombre, edad)
-            return redirect('dueño')
+            return redirect('veterinario')
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
@@ -139,7 +135,6 @@ def crearMascota(request):
     username = request.session.get('username')
     if username:
         if request.method == 'GET':
-            print("entre")
             return render(request, 'historia-clinica/agregar-mascota.html', {
                 'form': AgregarMascotaForm()
             })
@@ -153,7 +148,7 @@ def crearMascota(request):
             peso = request.POST['peso']
             AgregarMascota(nombre, cedula_dueño, edad, especie,
                            raza, caracteristicas, peso)
-            return redirect('mascota')
+            return redirect('veterinario')
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 

@@ -43,9 +43,10 @@ def buscarHistoriaClinica(id):
     return collection.find_one(id)
     
 
-def HistoriaClinicaCreacion(id,profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
+def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, vacunas, alergiaMedicamentos, detalleProcedimiento ):
     idOrden = f'{uuid.uuid4()}'
     orden = OrdenMascotas()
+    profesionalAtiende = Usuario.objects.using('mysql').get(nombreUsuario = username).nombre
     if medicamento != "ninguno":
         mascota = Mascota.objects.using('mysql').get(id=str(id))
         usuario = Usuario.objects.using('mysql').get(id=str(mascota.Usuario.id))
