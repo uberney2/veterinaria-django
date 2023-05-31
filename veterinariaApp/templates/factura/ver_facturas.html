@@ -1,0 +1,22 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+{% include 'shared/navbar-vet.html' %}
+<h1>Detalles de facturas</h1>
+<p>id : {{facturas.id}}</p>
+<p>fecha: {{facturas.fecha}}</p>
+
+{% if facturas.idMascota != None %}
+<p>id mascota:{{facturas.idMascota}} </p>
+{% endif %}
+
+<p> cedula dueño mascota: {{facturas.cedulaDueño}}</p>
+
+{% if facturas.idOrden != None %}
+<p>id de la orden: {{facturas.idOrden}}</p>
+{% endif %}
+
+<p>productos: {{factura.productos}}</p>
+<p>total: {{facturas.total}}</p>
+
+{% endblock %}

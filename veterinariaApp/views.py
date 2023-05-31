@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render, redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
 from veterinariaApp.controllers.AdminitradorController.AdministradorBussines import lookAll
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes, buscarFactura, BuscarFacturasbyId
 from veterinariaApp.controllers.auth import autenticar
 from veterinariaApp.controllers.VendedorController.VendedorControllerBusiness import VentaOrden
 from django.contrib.auth import login, logout, authenticate
@@ -384,3 +384,49 @@ def eliminarUser(request, user_id):
         return render(request, 'shared/admin.html', {"error": "No se pudo eliminar."})
     except ObjectDoesNotExist:
         return render(request, 'shared/admin.html', {"error": "El usuario no existe."})
+    
+def comienzoBuscarFacturas(request):
+    print('entre')
+    username = request.session.get('username')
+    if username:
+        
+        if request.method == 'GET':
+            return render(request, 'factura/comienzo_factura.html', {
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False,
+            })
+        else:
+            cedula_dueño = request.POST['cedula_dueño']
+            dueño = BuscarDueño(cedula_dueño)
+            if dueño is None:
+                return render(request, 'factura/comienzo_factura.html', {
+                    'hasDueño': False,
+                    'disableBuscarUsuario': True
+                })
+            else:
+                facturas = buscarFactura(dueño.cedula)
+                if facturas is None:
+                    return render(request, 'factura/comienzo_factura.html', {
+                        'hasDueño': True,
+                        'facturas': None,
+                        'disableBuscarUsuario': True
+                    })
+                else:
+                    return render(request, 'factura/comienzo_factura.html', {
+                        'hasDueño': True,
+                        'facturas': facturas,
+                        'disableBuscarUsuario': True
+                    })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+    
+def listarFacturas(request, id):
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            facturas = BuscarFacturasbyId(id)
+            return render(request, 'factura/ver_facturas.html', {
+                'facturas': facturas
+            })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
