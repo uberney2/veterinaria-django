@@ -7,9 +7,10 @@
 <form method="POST" action="{% url 'hc' id %}">
     {% csrf_token %}
     {{form.as_p}}
-    <button>
+    <button class="save-button">
         Save
     </button>
 </form>
+<a href="{% url 'veterinario' %}"" class="back-button">Volver a inicio</a>
 <a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

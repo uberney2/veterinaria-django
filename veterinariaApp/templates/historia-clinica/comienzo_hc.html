@@ -2,7 +2,7 @@
 
 {% block content %}
 {% include 'shared/navbar-vet.html' %}
-<h1>HC</h1>
+<h1>Historia Clinica</h1>
 <br />
 {% if disableBuscarUsuario == False %}
 <form method="POST" action="{% url 'crear-historia' %}">
@@ -10,7 +10,7 @@
     {{ form.cedula_dueño.label_tag }} 
     {{ form.cedula_dueño }}
     <br />
-    <button>buscar</button>
+    <button class="save-button">buscar</button>
 </form>
 {% endif %}
 
@@ -27,12 +27,12 @@
 {% endif %}
 
 {% if hasDueño == True and mascotas is not None %}
-
+<h3>Click sobre la moiscota que realizara la consulta </h3>
 {% for mascota in mascotas %}
-
 <div>
+    
     <a href="{% url 'hc' mascota.id %}">
-        <h1>{{mascota.nombre}}</h1>
+        <h1 style="font-style: italic ;">{{mascota.nombre}}</h1>
     </a>
 </div>
 
@@ -40,5 +40,6 @@
 {% endfor %}
 
 {% endif %}
+<a href="{% url 'veterinario' %}"" class="back-button">Volver a inicio</a>
 <a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

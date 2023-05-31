@@ -5,25 +5,34 @@
 <h1>Registrar el dueño de la mascota</h1>
 
 <form method="POST" action="{% url 'dueño' %}">
-    {% csrf_token %}
-    {{ form.cedula.label_tag }}
-    {{ form.cedula }}
-    <br>
+
+    <div>
+        {% csrf_token %}
+        <div>
+            {{ form.cedula.label_tag }}
+            {{ form.cedula }}
+        </div>
+        
+        <div>
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+        </div>
+        
+        <div>
+            {{ form.edad.label_tag }}
+            {{ form.edad }}
+        </div>
+
+        <div>
+            {{ form.rol.label_tag }}
+            {{ form.rol }}
+        </div>
+    </div>
     
-    {{ form.nombre.label_tag }}
-    {{ form.nombre }}
-    <br>
-    
-    {{ form.edad.label_tag }}
-    {{ form.edad }}
-    <br>
-    
-    {{ form.rol.label_tag }}
-    {{ form.rol }}
-    <br>
-    <button>
+    <button class="save-button">
         Save
     </button>
 </form>
+<a href="{% url 'veterinario' %}"" class="back-button">Volver a inicio</a>
 <a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}
