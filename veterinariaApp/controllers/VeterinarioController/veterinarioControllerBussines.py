@@ -52,7 +52,7 @@ def buscarHistoriaClinica(id):
 def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, vacunas, alergiaMedicamentos, detalleProcedimiento ):
     idOrden = f'{uuid.uuid4()}'
     orden = OrdenMascotas()
-    profesionalAtiende = Usuario.objects.using('mysql').get(nombreUsuario = username).nombre
+    profesionalAtiende = Usuario.objects.using('mysql').get(nombreUsuario = username)
     if medicamento != "ninguno":
         mascota = Mascota.objects.using('mysql').get(id=str(id))
         usuario = Usuario.objects.using('mysql').get(id=str(mascota.Usuario.id))
@@ -65,9 +65,11 @@ def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagno
         estadoOrden = "Activa"
         aplicaOrden = True
     else:
-        idOrden = 'no aplica'
-        estadoOrden = "No aplica"
+        idOrden = ''
+        estadoOrden = ""
         aplicaOrden = False
+        medicamento = ""
+        dosis = ""
     try:
         hasHistoriaClinica = buscarHistoriaClinica(id)
     except HistoriaClinica.DoesNotExist:
@@ -78,7 +80,7 @@ def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagno
         hcJson['_id'] = id  
         hcJson[id ] = {}  
         hcJson[id ][fechaConsulta] = {
-            "medicoVeterinario": profesionalAtiende,
+            "medicoVeterinario": profesionalAtiende.nombre,
             "motivoConsulta": motivoConsulta,
             "sintomatologia": sintomatologia,
             "diagnostico": diagnostico,
@@ -100,7 +102,7 @@ def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagno
     else:
         fechaConsulta = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         nuevaInfo = {
-            "medicoVeterinario": profesionalAtiende,
+            "medicoVeterinario": profesionalAtiende.nombre,
             "motivoConsulta": motivoConsulta,
             "sintomatologia": sintomatologia,
             "diagnostico": diagnostico,

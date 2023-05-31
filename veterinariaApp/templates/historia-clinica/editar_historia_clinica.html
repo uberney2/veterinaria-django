@@ -12,7 +12,7 @@
     <input type="text" name="fecha" value="{{ fecha }}" readonly>
 
     <label>Nombre Medico veterinario:</label>
-    <input type="text" name="medicoVeterinario" value="{{ hc.medicoVeterinario }}">
+    <input type="text" name="medicoVeterinario" value="{{ hc.medicoVeterinario }}" readonly>
 
     <label>Motivo consulta:</label>
     <input type="text" name="motivoConsulta" value="{{ hc.motivoConsulta }}">
@@ -30,13 +30,13 @@
     <input type="text" name="alergiasMedicamentos" value="{{ hc.alergiasMedicamentos }}">
 
     <label>Medicamento:</label>
-    <input type="text" name="medicamento" value="{{ hc.medicamento }}">
+    <input type="text" name="medicamento" value="{{ hc.medicamento }}" readonly>
 
     <label>Dosis:</label>
-    <input type="text" name="dosis" value="{{ hc.dosis }}">
+    <input type="text" name="dosis" value="{{ hc.dosis }}" readonly>
 
     <label>id Orden:</label>
-    <input type="text" name="idOrden" value="{{ hc.idOrden }}">
+    <input type="text" name="idOrden" value="{{ hc.idOrden }}" readonly>
 
     <label>Historial de vacunacion:</label>
     <input type="text" name="historialVacunacion" value="{{ hc.historialVacunacion }}">
@@ -45,7 +45,7 @@
     <input type="text" name="detalleProcedimiento" value="{{ hc.detalleProcedimiento }}">
 
     <label>estadoOrden:</label>
-    <input type="text" name="estadoOrden" value="{{ hc.estadoOrden }}">
+    <input type="text" name="estadoOrden" value="{{ hc.estadoOrden }}" readonly>
     <!-- Resto de los campos -->
     <button type="submit">Guardar cambios</button>
 </form>

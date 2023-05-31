@@ -4,8 +4,8 @@ from veterinariaApp.Enums.rolesEnum import Roles
 
 class CrearFormHistoriaClinica(forms.Form):
     motivoConsulta = forms.CharField(label="Motivo consulta", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
-    medicamento = forms.CharField(label="Medicamento", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
-    dosis = forms.CharField(label="Dosis", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
+    medicamento = forms.CharField(label="Medicamento", max_length=200, required=False, widget=forms.TextInput(attrs={'class': 'input'}))
+    dosis = forms.CharField(label="Dosis", max_length=200, required=False, widget=forms.TextInput(attrs={'class': 'input'}))
     sintomatologia =  forms.CharField(label="Sintomatologia", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     diagnostico = forms.CharField(label="Diagnostico", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
     procedimiento = forms.CharField(label="Procedimiento", max_length=200, widget=forms.TextInput(attrs={'class': 'input'}))
