@@ -1,4 +1,4 @@
-from veterinariaApp.models import Usuario,Rol
+from veterinariaApp.models import Usuario,Rol, OrdenMascotas
 import uuid
 from django.core.exceptions import ObjectDoesNotExist
 def buscar(usuario):
@@ -42,3 +42,7 @@ def lookAll():
          user.rol_id = Roles.get(rol)
 
     return users
+
+def buscarOrdenbyId(cedula):
+    ordenes = OrdenMascotas.objects.using('mysql').get(cedulaDueno=cedula)  
+    return ordenes

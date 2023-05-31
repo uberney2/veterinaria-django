@@ -5,8 +5,123 @@
 
 {% load static %}
 
-
-{% csrf_token %}
 <h1>Venta con orden</h1>
 
+<h1>Formulario de venta de medicamentos</h1>
+
+<form action="{% url 'ventaConOrden' %}" method="post" id="formulario">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="cedulaDueño">Cédula del cliente:</label required>
+        <input type="text" class="form-control" id="cedulaDueño" placeholder="Ingrese su cédula" name="cedulaDueño" required>
+    </div>
+
+    <div class="form-group">
+        <label for="producto">Seleccione el medicamento:</label>
+    </div>
+
+    <div class="form-group">
+        <label for="productos"></label>
+        <div>
+            <input type="checkbox" id="producto1" name="productos[]" value="Desparasitante para perro: $10.99"
+                data-precio="10.99">
+            <label for="producto1">Desparasitante para perro: $10.99</label><br>
+
+            <input type="checkbox" id="producto1" name="productos[]" value="Desparasitante para perro: $10.99"
+                data-precio="10.99">
+            <label for="producto1">Desparasitante para perro: $10.99</label><br>
+
+            <input type="checkbox" id="producto1" name="productos[]" value="Desparasitante para perro: $10.99"
+                data-precio="10.99">
+            <label for="producto1">Desparasitante para perro: $10.99</label><br>
+
+            <input type="checkbox" id="producto2" name="productos[]" value="Desparasitante para gato: $8.50"
+                data-precio="8.50">
+            <label for="producto2">Desparasitante para gato: $8.50</label><br>
+
+            <input type="checkbox" id="producto3" name="productos[]" value="Prevención de pulgas: $5.99"
+                data-precio="5.99">
+            <label for="producto3">Prevención de pulgas: $5.99</label><br>
+
+            <input type="checkbox" id="producto4" name="productos[]" value="Analgésico: $3.99" data-precio="3.99">
+            <label for="producto4">Analgésico: $3.99</label><br>
+
+            <input type="checkbox" id="producto5" name="productos[]" value="Aspirina: $1.99" data-precio="1.99">
+            <label for="producto5">Aspirina: $1.99</label><br>
+
+            <input type="checkbox" id="producto6" name="productos[]" value="Acetaminofen: $2.99"
+                data-precio="2.99">
+            <label for="producto6">Acetaminofen: $2.99</label><br>
+
+            <input type="checkbox" id="producto7" name="productos[]" value="Suero: $15.99" data-precio="15.99">
+            <label for="producto7">Suero: $15.99</label><br>
+
+            <input type="checkbox" id="producto8" name="productos[]" value="Amoxicilina: $7.99"
+                data-precio="7.99">
+            <label for="producto8">Amoxicilina: $7.99</label><br>
+
+            <input type="checkbox" id="producto9" name="productos[]" value="Gotas para ojos: $6.99"
+                data-precio="6.99">
+            <label for="producto9">Gotas para ojos: $6.99</label><br>
+
+        </div>
+    </div>
+
+    <br>
+
+    <label for="cantidad">Cantidad:</label>
+    <input type="number" class="form-control" id="cantidad" name="cantidad"
+        placeholder="Cantidad de medicamentos" readonly>
+
+    <br>
+
+    <label for="total">Valor total:</label>
+    <input type="text" class="form-control" id="total" placeholder="0.00" name="total" readonly>
+
+    <input type="hidden" class="form-control" id="idMascota" name="idMascota" value="{{idMascota}}" readonly>
+
+    <input type="hidden" class="form-control" id="idOrden" name="idOrden" value="{{idOrden}}" readonly>
+
+    <br>
+
+    <input type="text" class="form-control" id="productos" name="productos" hidden>
+
+    <button type="submit" class="btn btn-primary">Facturar</button>
+
+
+    <a class="btn btn-primary" href="{% url 'vendedor' %}">Regresar</a>
+    <a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
+</form>
+
+<script>
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const valorInput = document.getElementById('total');
+    const cantidadInput = document.getElementById('cantidad');
+    const formulario = document.getElementById('formulario');
+
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            let total = 0.00;
+            let cant = 0;
+            let seleccionados = [];
+
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    const precio = parseFloat(checkbox.getAttribute('data-precio'));
+                    total += precio;
+                    cant++;
+                    seleccionados.push(checkbox.value);
+                }
+            });
+
+            valorInput.value = total.toFixed(2);
+            cantidadInput.value = cant;
+            formulario.productos.value = seleccionados.join(', ');
+            productosInput.value = seleccionados;
+        });
+    });
+    console.lo(seleccionados[0].value)
+</script>
+
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
 {% endblock %}

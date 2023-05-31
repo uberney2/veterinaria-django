@@ -20,6 +20,8 @@ urlpatterns=[
     path('confirmacion-cancelar-orden/<str:id>', views.confirmacionCancelacionOrden, name = 'confirmacion-cancelar-orden' ),
     path('vendedor/', views.vendedor, name='vendedor'),
     path('ventaSinOrden/', views.ventaSinOrden, name='ventaSinOrden'),
-    path('ventaConOrden/', views.ventaConOrden, name='ventaConOrden'),
+    path('ventaConOrden/<str:id>', views.ventaConOrden, name='ventaConOrden'),
+    path('comienzo_factura_orden/', views.comienzo_factura, name='comienzo_factura_orden'),
     path('error/<str:user_id>/delete', views.eliminarUser, name = 'delete' ),
+    
 ]

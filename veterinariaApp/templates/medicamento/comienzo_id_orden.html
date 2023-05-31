@@ -1,0 +1,44 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+{% include 'shared/navbar-vet.html' %}
+<h1>Buscar facturas pendientes</h1>
+<br />
+{% if disableBuscarUsuario == False %}
+<form method="POST" action="{% url 'crear-historia' %}">
+    {% csrf_token %}
+    {{ form.cedula_dueño.label_tag }} 
+    {{ form.cedula_dueño }}
+    <br />
+    <button>buscar</button>
+</form>
+{% endif %}
+
+{% if hasDueño == False %}
+<div>
+    <a href="{% url 'dueño' %}"> Agregar Dueño de la mascota</a>
+</div>
+{% endif %}
+
+{% if hasDueño == True and mascotas is None %}
+<div>
+    <a href="{% url 'mascota' %}"> Agregar Mascota</a>
+</div>
+{% endif %}
+
+{% if hasDueño == True and ordenes is not None %}
+
+{% for orden in ordenes %}
+
+<div>
+    <a href="{% url 'hc' mascota.id %}">
+        <h1>{{mascota.nombre}}</h1>
+    </a>
+</div>
+
+
+{% endfor %}
+
+{% endif %}
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
+{% endblock %}
