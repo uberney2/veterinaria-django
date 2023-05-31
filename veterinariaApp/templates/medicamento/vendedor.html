@@ -7,8 +7,6 @@
 
 
 {% csrf_token %}
-<!-- <a style="text-decoration: none;"  href="{% url 'ventaConOrden' %}">Ir a venta con orden</a>
-<a href="{% url 'ventaSinOrden' %}">Ir a venta sin orden</a> -->
 <!DOCTYPE html>
 <html>
 
@@ -47,11 +45,18 @@
 
         <div class="row">
             <div class="col-md-6">
-                <a class="btn btn-primary btn-block" href="{% url 'ventaConOrden' %}">Ir a venta con orden</a>
+                <a class="btn btn-primary btn-block" href="{% url 'comienzo_factura_orden' %}">Ir a venta con orden</a>
             </div>
+            <br>
             <div class="col-md-6">
                 <a class="btn btn-secondary btn-block" href="{% url 'ventaSinOrden' %}">Ir a venta sin orden</a>
             </div>
+            <div class="col-md-6">
+                <a class="btn btn-secondary btn-block" href="{% url 'factura' %}">Ver Facturas</a>
+            </div>
+            <br><br>
+            <a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
+            <br><br>
         </div>
     </div>
 

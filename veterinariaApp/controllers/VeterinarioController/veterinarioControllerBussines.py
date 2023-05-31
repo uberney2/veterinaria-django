@@ -59,7 +59,7 @@ def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagno
         orden.id = idOrden
         orden.idMascota = id
         orden.cedulaDueno = usuario.cedula
-        orden.cedulaVeterinario = "1037238472"
+        orden.cedulaVeterinario = profesionalAtiende.cedula
         orden.nombreMedicamento = medicamento
         orden.estado = "Activa"
         estadoOrden = "Activa"

@@ -1,0 +1,51 @@
+{% extends 'shared/base.html' %}
+
+
+{% block content %}
+
+{% load static %}
+
+
+{% csrf_token %}
+<h1>factura</h1>
+{% if disableBuscarUsuario == False %}
+<form method="POST" action="{% url 'comienzo_factura_orden' %}">
+    {% csrf_token %}
+    {{ form.cedula_dueño.label_tag }} 
+    {{ form.cedula_dueño }}
+    <br />
+    <button>buscar</button>
+</form>
+{% endif %}
+
+{% if hasDueño == False %}
+<h3>No se encuentra usuario con la cedula ingresada</h3>
+{% endif %}
+
+{% if hasDueño == True and ordenes is None %}
+<div>
+    <h1>El usuario no tiene ordenes registradas</h1>
+</div>
+{% endif %}
+
+{% if hasDueño == True and ordenes is not None %}
+<h1>Seleccione la Orden para realiazar la venta</h1>
+<br>
+{% for orden in ordenes %}
+<div> 
+    <a href="{% url 'ventaConOrden' orden.id %}?idMascota={{orden.idMascota}}">
+        <h1>Orden numero: {{orden.id}}</h1>
+        <h3>Fecha creación: {{orden.fechaHistoria}}</h3>
+        <h3>identificación de la mascota: {{orden.idMascota}}</h3>
+        <h3>Identificación del dueño de la mascota: {{orden.cedulaDueno}}</h3>
+        <h3>Identificación del veterinario: {{orden.cedulaVeterinario}}</h3>
+        <h3>Medicamentos: {{orden.nombreMedicamento}}</h3>
+        <h3>Estado de la orden: {{orden.estado}}</h3>
+    </a> 
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

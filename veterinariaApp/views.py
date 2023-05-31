@@ -4,7 +4,7 @@ from veterinariaApp.controllers.AdminitradorController.AdministradorInputs impor
 from veterinariaApp.controllers.AdminitradorController.AdministradorBussines import lookAll
 from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes, buscarFactura, BuscarFacturasbyId
 from veterinariaApp.controllers.auth import autenticar
-from veterinariaApp.controllers.VendedorController.VendedorControllerBusiness import VentaOrden
+from veterinariaApp.controllers.VendedorController.VendedorControllerBusiness import VentaOrden, VentaSinOrden,VentaConOrden
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.http import HttpResponse
@@ -18,6 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+
 
 
 def iniciar(request):
@@ -174,25 +175,35 @@ def ventaSinOrden(request):
     if username:
         if request.method == 'GET':
             return render(request, 'medicamento/ventaSinOrden.html')
-        else:
-            cedula = request.POST["cedula"]
-            medicamentos = [valor.strip()
-                            for valor in request.POST["medicamentos"].split(",")]
+        elif request.method == 'POST':
+            cedulaDueño = request.POST["cedulaDueño"]
+            productos = [valor.strip() for valor in request.POST["productos"].split(",")]
             cantidad = request.POST["cantidad"]
-            valor = request.POST["valor"]
-            VentaOrden(cedula, medicamentos, cantidad, valor)
-            return redirect('ventaSinOrden')
-    else:
-        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+            total = request.POST["total"]
+            VentaSinOrden(cedulaDueño, productos, cantidad, total)
+        
+    return redirect('ventaSinOrden')
 
 
-def ventaConOrden(request):
+def ventaConOrden(request,id):
     username = request.session.get('username')
     if username:
+        idMascota = request.GET.get('idMascota')
         if request.method == 'GET':
-            return render(request, 'medicamento/ventaConOrden.html')
-    else:
-        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+            return render(request, 'medicamento/ventaConOrden.html', {
+                    'idOrden': id,
+                    'idMascota': idMascota
+                })
+        elif request.method == 'POST':
+            cedulaDueño = request.POST["cedulaDueño"]
+            productos = [valor.strip() for valor in request.POST["productos"].split(",")]
+            cantidad = request.POST["cantidad"]
+            total = request.POST["total"]
+            idMascota = request.POST["idMascota"]
+            IdOrden = request.POST["idOrden"]
+            VentaConOrden(cedulaDueño, productos, cantidad, total,idMascota,IdOrden)
+            
+    return redirect('vendedor')
 
 
 def indexHistoriaClinica(request):
@@ -274,7 +285,6 @@ def editarHistoriaClinica(request):
                     })
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
-
 
 def listarHistoriaClinica(request, id):
     username = request.session.get('username')
@@ -430,3 +440,37 @@ def listarFacturas(request, id):
             })
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+
+def comienzo_factura(request):
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            return render(request, 'medicamento/comienzo_factura.html', {
+                    'form': BuscarUsuarioForm(),
+                    'disableBuscarUsuario': False
+                })
+        else:
+            cedula_dueño = request.POST['cedula_dueño']
+            dueño = BuscarDueño(cedula_dueño)
+            if dueño is None:
+                return render(request, 'medicamento/comienzo_factura.html', {
+                    'hasDueño': False,
+                    'disableBuscarUsuario': True
+                })
+            else:
+                ordenes = buscarOrdenes(dueño.cedula)
+                if ordenes is None:
+                    return render(request, 'medicamento/comienzo_factura.html', {
+                        'hasDueño': True,
+                        'ordenes': None,
+                        'disableBuscarUsuario': True
+                    })
+                else:
+                    return render(request, 'medicamento/comienzo_factura.html', {
+                        'hasDueño': True,
+                        'ordenes': ordenes,
+                        'disableBuscarUsuario': True
+                    })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+    

@@ -1,0 +1,53 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+{% include 'shared/navbar-vet.html' %}
+{{hc}}
+<h1>formulario de edicion de Historia Clinica</h1>
+
+<form method="POST" action="{% url 'editar-id-orden' id %}" style="display: flex; flex-direction: column;">
+    {% csrf_token %}
+
+    <label>Fecha:</label>
+    <input type="text" name="fecha" value="{{ fecha }}" readonly>
+
+    <label>Nombre Medico veterinario:</label>
+    <input type="text" name="medicoVeterinario" value="{{ hc.medicoVeterinario }}">
+
+    <label>Motivo consulta:</label>
+    <input type="text" name="motivoConsulta" value="{{ hc.motivoConsulta }}">
+
+    <label>Sintomatologia:</label>
+    <input type="text" name="sintomatologia" value="{{ hc.sintomatologia }}">
+
+    <label>Diagnostico:</label>
+    <input type="text" name="diagnostico" value="{{ hc.diagnostico }}">
+
+    <label>Procedimiento:</label>
+    <input type="text" name="procedimiento" value="{{ hc.procedimiento }}">
+
+    <label>Alergias a medicamentos:</label>
+    <input type="text" name="alergiasMedicamentos" value="{{ hc.alergiasMedicamentos }}">
+
+    <label>Medicamento:</label>
+    <input type="text" name="medicamento" value="{{ hc.medicamento }}">
+
+    <label>Dosis:</label>
+    <input type="text" name="dosis" value="{{ hc.dosis }}">
+
+    <label>id Orden:</label>
+    <input type="text" name="idOrden" value="{{ hc.idOrden }}">
+
+    <label>Historial de vacunacion:</label>
+    <input type="text" name="historialVacunacion" value="{{ hc.historialVacunacion }}">
+
+    <label>Detalles del procedimiento:</label>
+    <input type="text" name="detalleProcedimiento" value="{{ hc.detalleProcedimiento }}">
+
+    <label>estadoOrden:</label>
+    <input type="text" name="estadoOrden" value="{{ hc.estadoOrden }}">
+    <!-- Resto de los campos -->
+    <button type="submit">Guardar cambios</button>
+</form>
+<a href="{% url 'logout' %}" class="logout-button">Cerrar sesión</a>
+{% endblock %}
