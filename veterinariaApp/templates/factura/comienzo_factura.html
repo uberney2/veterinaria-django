@@ -1,0 +1,42 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+{% include 'shared/navbar-vet.html' %}
+<h1>Lista de facturas</h1>
+<br />
+{% if disableBuscarUsuario == False %}
+<form method="POST" action="{% url 'factura' %}">
+    {% csrf_token %}
+    {{ form.cedula_dueño.label_tag }} 
+    {{ form.cedula_dueño }}
+    <br />
+    <button>buscar</button>
+</form>
+{% endif %}
+
+{% if hasDueño == False %}
+<h3>no existe ordenes con la cedula ingresada.!!!</h3>
+{% endif %}
+
+{% if hasDueño == True and facturas is None %}
+<div>
+    <h1>el usuario no tiene facturas registradas</h1>
+</div>
+{% endif %}
+
+{% if hasDueño == True and facturas is not None %}
+
+{% for factura in facturas %}
+
+<div>
+    <h1>Seleccione la factura para ver sus detalles</h1>
+    <a href="{% url 'listar-factura' factura.id %}">
+        <h1>factura numero: {{factura.id}}</h1>
+    </a>
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

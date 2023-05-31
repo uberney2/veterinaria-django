@@ -22,4 +22,6 @@ urlpatterns=[
     path('ventaSinOrden/', views.ventaSinOrden, name='ventaSinOrden'),
     path('ventaConOrden/', views.ventaConOrden, name='ventaConOrden'),
     path('error/<str:user_id>/delete', views.eliminarUser, name = 'delete' ),
+    path('comienzo-factura/', views.comienzoBuscarFacturas, name = 'factura' ),
+    path('listar-facturas/<str:id>', views.listarFacturas, name = 'listar-factura' ),
 ]

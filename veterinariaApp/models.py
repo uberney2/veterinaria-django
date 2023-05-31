@@ -75,14 +75,13 @@ class OrdenMascotas(models.Model):
     
 class Factura(models.Model):
     id = models.CharField(max_length=200, primary_key=True)
-    idMascota = models.CharField(max_length=200)
+    idMascota = models.CharField(max_length=200, null=True, blank=True)
     cedulaDueño = models.CharField(max_length=200)
-    idOrden = models.CharField(max_length=200)
-    productos = models.TextField
-    total = models.TextField
-    fecha = models.DateField
-    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    
+    idOrden = models.CharField(max_length=200, null=True, blank=True)
+    productos = models.CharField(max_length=200)
+    cantidad = models.CharField(max_length=200)
+    total = models.CharField(max_length=200)
+    fecha = models.CharField(max_length=200)
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Factura'
@@ -94,7 +93,6 @@ class Productos(models.Model):
     cantidad = models.CharField(max_length=200)
     valor_venta = models.CharField(max_length=200)
     
-
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Productos'

@@ -1,4 +1,4 @@
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas, buscarHistoriasClinicasById, consultarHistoriaClinicaByFechaAndId, actualizarHistoriaClinica, buscarOrdenesById, cancelacionOrden
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerBussines import HistoriaClinicaCreacion, AfiliarDueñoMascota, afiliarMascota, buscar, buscarMascotas, buscarHistoriasClinicasById, consultarHistoriaClinicaByFechaAndId, actualizarHistoriaClinica, buscarOrdenesById, cancelacionOrden, buscarFacturas, BuscarFacturabyId
 
 
 def AgregarDueñoMascota(cedulaDueño, nombreDueño, edad):
@@ -121,8 +121,14 @@ def buscarMascota(cedula_dueño):
         return
     return buscarMascotas(cedula_dueño)
 
+def buscarFactura(cedula_dueño):
+    return buscarFacturas(cedula_dueño)
+
 def BuscarHistoriasbyId(id):
     return buscarHistoriasClinicasById(id)
+
+def BuscarFacturasbyId(id):
+    return BuscarFacturabyId(id)
 
 def consultarHistoriaClinicaByFecha(fecha, id):
     return consultarHistoriaClinicaByFechaAndId(fecha, id)
