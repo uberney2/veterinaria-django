@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render, redirect
 from veterinariaApp.controllers.AdminitradorController.AdministradorInputs import afiliarPersona
 from veterinariaApp.controllers.AdminitradorController.AdministradorBussines import lookAll
-from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes
+from veterinariaApp.controllers.VeterinarioController.veterinarioControllerInputs import AgregarDueñoMascota, AgregarMascota, CreacionHistoriaClinica, BuscarDueño, buscarMascota, BuscarHistoriasbyId, consultarHistoriaClinicaByFecha, updateHistoriaClinica, buscarOrdenes, cancelarOrdenes, buscarFactura, BuscarFacturasbyId
 from veterinariaApp.controllers.auth import autenticar
 from veterinariaApp.controllers.VendedorController.VendedorControllerBusiness import VentaOrden, VentaSinOrden,VentaConOrden
 from django.contrib.auth import login, logout, authenticate
@@ -64,6 +64,8 @@ def singup(request):
                     return redirect('admin')
                 elif log.rol_id == "2":
                     return redirect('veterinario')
+                else:
+                    return redirect('vendedor')
 
             else:
                 return render(request, 'shared/singup.html', {"url": " ", "error": "Usuario o contraseña incorrectos"})
@@ -92,24 +94,21 @@ def crearHistoriaClinica(request, id):
         if request.method == 'GET':
             return render(request, 'historia-clinica/historia_clinica.html', {
                 'form': CrearFormHistoriaClinica(),
-                'id': id
+                'id': id,
             })
         else:
-            medicoVeterinario = request.POST['medicoVeterinario']
             motivoConsulta = request.POST['motivoConsulta']
             sintomatologia = request.POST['sintomatologia']
             diagnostico = request.POST['diagnostico']
             procedimiento = request.POST['procedimiento']
             medicamento = request.POST['medicamento']
             dosis = request.POST['dosis']
-            idOrden = request.POST['idOrden']
             historialVacunacion = request.POST['historialVacunacion']
             alergiasMedicamentos = request.POST['alergiasMedicamentos']
             detalleProcedimiento = request.POST['detalleProcedimiento']
-            estadoOrden = request.POST['estadoOrden']
 
-            CreacionHistoriaClinica(id, medicoVeterinario, motivoConsulta, sintomatologia, diagnostico, procedimiento,
-                                    medicamento, dosis, idOrden, estadoOrden, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
+            CreacionHistoriaClinica(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento,
+                                    medicamento, dosis, historialVacunacion, alergiasMedicamentos, detalleProcedimiento)
 
             return redirect('veterinario')
     else:
@@ -120,7 +119,6 @@ def crearDueñoMascota(request):
     username = request.session.get('username')
     if username:
         if request.method == 'GET':
-            print("entre")
             return render(request, 'historia-clinica/registro_dueño_mascota.html', {
                 'form': AgregarDueñoMascotaForm()
             })
@@ -129,7 +127,7 @@ def crearDueñoMascota(request):
             nombre = request.POST['nombre']
             edad = request.POST['edad']
             AgregarDueñoMascota(cedula, nombre, edad)
-            return redirect('dueño')
+            return redirect('veterinario')
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
@@ -138,7 +136,6 @@ def crearMascota(request):
     username = request.session.get('username')
     if username:
         if request.method == 'GET':
-            print("entre")
             return render(request, 'historia-clinica/agregar-mascota.html', {
                 'form': AgregarMascotaForm()
             })
@@ -152,7 +149,7 @@ def crearMascota(request):
             peso = request.POST['peso']
             AgregarMascota(nombre, cedula_dueño, edad, especie,
                            raza, caracteristicas, peso)
-            return redirect('mascota')
+            return redirect('veterinario')
     else:
         return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
@@ -166,7 +163,11 @@ def eliminarUser(request, user_id):
 
 
 def vendedor(request):
-    return render(request, 'medicamento/vendedor.html')
+    username = request.session.get('username')
+    if username:
+        return render(request, 'medicamento/vendedor.html')
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 
 def ventaSinOrden(request):
@@ -391,6 +392,52 @@ def eliminarUser(request, user_id):
         return render(request, 'shared/admin.html', {"error": "No se pudo eliminar."})
     except ObjectDoesNotExist:
         return render(request, 'shared/admin.html', {"error": "El usuario no existe."})
+    
+def comienzoBuscarFacturas(request):
+    print('entre')
+    username = request.session.get('username')
+    if username:
+        
+        if request.method == 'GET':
+            return render(request, 'factura/comienzo_factura.html', {
+                'form': BuscarUsuarioForm(),
+                'disableBuscarUsuario': False,
+            })
+        else:
+            cedula_dueño = request.POST['cedula_dueño']
+            dueño = BuscarDueño(cedula_dueño)
+            if dueño is None:
+                return render(request, 'factura/comienzo_factura.html', {
+                    'hasDueño': False,
+                    'disableBuscarUsuario': True
+                })
+            else:
+                facturas = buscarFactura(dueño.cedula)
+                if facturas is None:
+                    return render(request, 'factura/comienzo_factura.html', {
+                        'hasDueño': True,
+                        'facturas': None,
+                        'disableBuscarUsuario': True
+                    })
+                else:
+                    return render(request, 'factura/comienzo_factura.html', {
+                        'hasDueño': True,
+                        'facturas': facturas,
+                        'disableBuscarUsuario': True
+                    })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
+    
+def listarFacturas(request, id):
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            facturas = BuscarFacturasbyId(id)
+            return render(request, 'factura/ver_facturas.html', {
+                'facturas': facturas
+            })
+    else:
+        return render(request, 'shared/error.html', {"error": "debe estar autenticado"})
 
 def comienzo_factura(request):
     username = request.session.get('username')

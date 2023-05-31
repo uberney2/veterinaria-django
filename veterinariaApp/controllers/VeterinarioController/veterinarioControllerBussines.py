@@ -1,6 +1,6 @@
 import uuid
 from veterinariaApp.Enums.rolesEnum import Roles
-from veterinariaApp.models import HistoriaClinica, Mascota, OrdenMascotas, Rol, Usuario
+from veterinariaApp.models import Factura, HistoriaClinica, Mascota, OrdenMascotas, Rol, Usuario
 from django.core.exceptions import ObjectDoesNotExist
 from veterinariaApp.conexionMongoDB import collection
 from datetime import datetime
@@ -16,6 +16,13 @@ def buscarMascotas(cedulaDueño):
     try:
         mascotas = Mascota.objects.using('mysql').filter(Usuario=str(cedulaDueño))
         return mascotas
+    except ObjectDoesNotExist:
+        return None
+
+def buscarFacturas(cedula_dueño):
+    try:
+        facturas = Factura.objects.using('mysql').filter(cedulaDueño=cedula_dueño)
+        return facturas
     except ObjectDoesNotExist:
         return None
 
@@ -41,11 +48,11 @@ def afiliarMascota(nombre, cedula_dueño, edad, especie, raza, caracteristicas, 
 
 def buscarHistoriaClinica(id):
     return collection.find_one(id)
-    
 
-def HistoriaClinicaCreacion(id,profesionalAtiende, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, idOrden, estadoOrden, vacunas, alergiaMedicamentos, detalleProcedimiento ):
+def HistoriaClinicaCreacion(id, username, motivoConsulta, sintomatologia, diagnostico, procedimiento, medicamento, dosis, vacunas, alergiaMedicamentos, detalleProcedimiento ):
     idOrden = f'{uuid.uuid4()}'
     orden = OrdenMascotas()
+    profesionalAtiende = Usuario.objects.using('mysql').get(nombreUsuario = username).nombre
     if medicamento != "ninguno":
         mascota = Mascota.objects.using('mysql').get(id=str(id))
         usuario = Usuario.objects.using('mysql').get(id=str(mascota.Usuario.id))
@@ -148,6 +155,9 @@ def actualizarHistoriaClinica(id, fecha, medicoVeterinario, motivoConsulta, sint
 def buscarOrdenesById(cedula):
     ordenes = OrdenMascotas.objects.using('mysql').filter(cedulaDueno=str(cedula))  
     return ordenes
+
+def BuscarFacturabyId(id):
+    return Factura.objects.using('mysql').get(id=id)
 
 def cancelacionOrden(idOrden, fecha, idMascota):
     orden = OrdenMascotas.objects.using('mysql').get(id = idOrden)

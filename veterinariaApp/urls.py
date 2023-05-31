@@ -23,5 +23,6 @@ urlpatterns=[
     path('ventaConOrden/<str:id>', views.ventaConOrden, name='ventaConOrden'),
     path('comienzo_factura_orden/', views.comienzo_factura, name='comienzo_factura_orden'),
     path('error/<str:user_id>/delete', views.eliminarUser, name = 'delete' ),
-    
+    path('comienzo-factura/', views.comienzoBuscarFacturas, name = 'factura' ),
+    path('listar-facturas/<str:id>', views.listarFacturas, name = 'listar-factura' ),
 ]

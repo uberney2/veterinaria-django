@@ -82,7 +82,6 @@ class Factura(models.Model):
     cantidad = models.CharField(max_length=200)
     total = models.CharField(max_length=200)
     fecha = models.CharField(max_length=200)
-    
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Factura'
@@ -94,7 +93,6 @@ class Productos(models.Model):
     cantidad = models.CharField(max_length=200)
     valor_venta = models.CharField(max_length=200)
     
-
     class Meta:
         app_label = 'veterinariaApp'
         db_table = 'Productos'
