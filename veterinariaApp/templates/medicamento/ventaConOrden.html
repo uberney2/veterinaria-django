@@ -9,7 +9,7 @@
 
 <h1>Formulario de venta de medicamentos</h1>
 
-<form action="{% url 'ventaConOrden' %}" method="post" id="formulario">
+<form action="{% url 'ventaConOrden' idOrden %}" method="post" id="formulario">
     {% csrf_token %}
     <div class="form-group">
         <label for="cedulaDueño">Cédula del cliente:</label required>

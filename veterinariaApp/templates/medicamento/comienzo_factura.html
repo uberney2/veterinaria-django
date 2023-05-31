@@ -29,11 +29,18 @@
 {% endif %}
 
 {% if hasDueño == True and ordenes is not None %}
-<h1>Seleccione la mascota para ver sus historias clinicas</h1>
+<h1>Seleccione la Orden para realiazar la venta</h1>
+<br>
 {% for orden in ordenes %}
 <div> 
     <a href="{% url 'ventaConOrden' orden.id %}?idMascota={{orden.idMascota}}">
-        <h1>{{orden.id}}</h1>
+        <h1>Orden numero: {{orden.id}}</h1>
+        <h3>Fecha creación: {{orden.fechaHistoria}}</h3>
+        <h3>identificación de la mascota: {{orden.idMascota}}</h3>
+        <h3>Identificación del dueño de la mascota: {{orden.cedulaDueno}}</h3>
+        <h3>Identificación del veterinario: {{orden.cedulaVeterinario}}</h3>
+        <h3>Medicamentos: {{orden.nombreMedicamento}}</h3>
+        <h3>Estado de la orden: {{orden.estado}}</h3>
     </a> 
 </div>
 

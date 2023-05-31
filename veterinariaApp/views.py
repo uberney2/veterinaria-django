@@ -171,14 +171,16 @@ def vendedor(request):
 
 
 def ventaSinOrden(request):
-    if request.method == 'GET':
-        return render(request, 'medicamento/ventaSinOrden.html')
-    elif request.method == 'POST':
-        cedulaDueño = request.POST["cedulaDueño"]
-        productos = [valor.strip() for valor in request.POST["productos"].split(",")]
-        cantidad = request.POST["cantidad"]
-        total = request.POST["total"]
-        VentaSinOrden(cedulaDueño, productos, cantidad, total)
+    username = request.session.get('username')
+    if username:
+        if request.method == 'GET':
+            return render(request, 'medicamento/ventaSinOrden.html')
+        elif request.method == 'POST':
+            cedulaDueño = request.POST["cedulaDueño"]
+            productos = [valor.strip() for valor in request.POST["productos"].split(",")]
+            cantidad = request.POST["cantidad"]
+            total = request.POST["total"]
+            VentaSinOrden(cedulaDueño, productos, cantidad, total)
         
     return redirect('ventaSinOrden')
 
@@ -198,10 +200,10 @@ def ventaConOrden(request,id):
             cantidad = request.POST["cantidad"]
             total = request.POST["total"]
             idMascota = request.POST["idMascota"]
-            IdOrden = request.POST["IdOrden"]
+            IdOrden = request.POST["idOrden"]
             VentaConOrden(cedulaDueño, productos, cantidad, total,idMascota,IdOrden)
             
-    return redirect('VentaConOrden')
+    return redirect('vendedor')
 
 
 def indexHistoriaClinica(request):

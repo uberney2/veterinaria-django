@@ -6,17 +6,17 @@
 <p>id : {{facturas.id}}</p>
 <p>fecha: {{facturas.fecha}}</p>
 
-{% if facturas.idMascota != None %}
+{% if facturas.idMascota != "" %}
 <p>id mascota:{{facturas.idMascota}} </p>
 {% endif %}
 
 <p> cedula dueño mascota: {{facturas.cedulaDueño}}</p>
 
-{% if facturas.idOrden != None %}
+{% if facturas.idOrden != "" %}
 <p>id de la orden: {{facturas.idOrden}}</p>
 {% endif %}
 
-<p>productos: {{factura.productos}}</p>
+<p>productos: {{facturas.productos}}</p>
 <p>total: {{facturas.total}}</p>
 
 {% endblock %}
